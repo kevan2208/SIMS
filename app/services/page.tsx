@@ -1,10 +1,31 @@
+import type { Metadata } from "next";
 import { PriceListSection } from "@/components/sections/price-list-section";
 import { ServicesSection } from "@/components/sections/services-section";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { CTASection } from "@/components/ui/cta-section";
 import { PageIntro } from "@/components/ui/page-intro";
-import { pageIntros, siteConfig } from "@/content/site";
+import { finalCtas, pageIntros, siteConfig } from "@/content/site";
+
+export const metadata: Metadata = {
+  title: `Services & Pricing | ${siteConfig.name}`,
+  description:
+    "Browse our complete service menu and pricing for hair treatments, facials, and gel nails in Mauritius. Professional salon services with clear pricing.",
+  keywords: [
+    "salon services",
+    "hair treatment",
+    "facial treatment",
+    "nail services",
+    "salon pricing",
+    "hair care",
+    "beauty services"
+  ].join(", "),
+  openGraph: {
+    title: `Services & Pricing | ${siteConfig.name}`,
+    description: "Browse our complete service menu and pricing",
+    url: "https://simshairandbeauty.com/services"
+  }
+};
 
 export default function ServicesPage() {
   return (
@@ -28,7 +49,7 @@ export default function ServicesPage() {
       </Container>
       <ServicesSection mode="page" />
       <PriceListSection />
-      <CTASection />
+      <CTASection content={finalCtas.services} />
     </main>
   );
 }

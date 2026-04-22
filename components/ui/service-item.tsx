@@ -21,7 +21,7 @@ export function ServiceItem({
   return (
     <article
       className={cn(
-        "group relative flex h-full flex-col rounded-[1.75rem] border border-brand-stone/80 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/25 hover:shadow-lift",
+        "group relative flex h-full flex-col rounded-[1.75rem] border border-brand-stone/80 shadow-soft transition-all duration-300 cubic-bezier(0.22, 1, 0.36, 1) hover:-translate-y-1 hover:border-brand-red/25 hover:shadow-lift",
         isFeatured
           ? "section-wash justify-between bg-brand-shell/90 p-6 sm:p-7"
           : "gap-4 bg-brand-shell/86 p-5 sm:p-6",

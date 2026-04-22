@@ -9,13 +9,6 @@ export type Service = {
   description: string;
 };
 
-export type ContactDetail = {
-  label: string;
-  value: string;
-  href?: string;
-  note?: string;
-};
-
 export type BusinessHour = {
   label: string;
   value: string;
@@ -27,15 +20,28 @@ export type ServiceCategory = {
   body: string;
 };
 
-export type HomePageLink = {
+export type PageIntro = {
   eyebrow: string;
   title: string;
   body: string;
-  href: string;
-  label: string;
 };
 
-type PageIntro = {
+export type CtaAction = {
+  label: string;
+  href: string;
+  external?: boolean;
+  download?: boolean;
+};
+
+export type CtaContent = {
+  eyebrow: string;
+  title: string;
+  body: string;
+  primaryCta: CtaAction;
+  secondaryCta: CtaAction;
+};
+
+export type VisitFact = {
   eyebrow: string;
   title: string;
   body: string;
@@ -59,8 +65,6 @@ export const siteConfig = {
   ],
   directionsHref:
     "https://www.google.com/maps?um=1&ie=UTF-8&fb=1&gl=mu&sa=X&geocode=KdE3PGh5-XwhMQeos8RM6xda&daddr=Flacq+Retail+Park,+MU,+40606",
-  mapEmbedHref:
-    "https://www.google.com/maps?q=Flacq+Retail+Park,+Mauritius,+40606&output=embed",
   hours: [
     { label: "Monday to Saturday", value: "08:30 - 17:00" },
     { label: "Sunday", value: "Closed" }
@@ -78,145 +82,136 @@ export const siteConfig = {
 
 export const navItems: NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "Landing Trial", href: "/landingPageTrial" },
-  { label: "Services", href: "/services" },
-  { label: "Contact", href: "/contact" }
+  { label: "Services", href: "/services" }
 ];
 
-export const heroContent = {
-  eyebrow: "Sim's Hair and Beauty • Mauritius",
-  title: "Hair, facials, and gel nails in one calm salon space.",
-  body:
-    "Sim's Hair and Beauty is a Mauritius salon for clients who want careful treatment, clear advice, and easy booking on WhatsApp.",
-  bookingNote:
-    "Send the service you want and the day that suits you best. Booking a few days ahead helps.",
-  availabilityLabel: "WhatsApp bookings",
-  hoursLabel: "Mon to Sat",
-  tags: ["Hair repair", "Facials", "Gel nails"]
+export const landingHero = {
+  eyebrow: "Sim's Hair and Beauty • Flacq, Mauritius",
+  title: "Hair, facials, and nails in one calm salon space.",
+  body: "Book on WhatsApp, browse the service menu, or open directions before your visit."
+};
+
+export const landingVisit = {
+  eyebrow: "Visit & book",
+  title: "Everything you need before your visit.",
+  body: "Use WhatsApp to arrange your appointment, check the opening hours, and open directions before heading to the salon.",
+  facts: [
+    {
+      eyebrow: "WhatsApp booking",
+      title: siteConfig.bookingWhatsappDisplay,
+      body: "Appointments and service questions are handled directly on WhatsApp."
+    },
+    {
+      eyebrow: "Opening hours",
+      title: "08:30 - 17:00",
+      body: "Monday to Saturday. Sunday is closed."
+    },
+    {
+      eyebrow: "Location",
+      title: "Flacq Retail Park",
+      body: "Mauritius, 40606. Open directions before you travel."
+    }
+  ] satisfies VisitFact[]
 };
 
 export const featuredServices: Service[] = [
   {
     title: "Absolute Repair Molecular Treatment",
     price: "Rs 2000",
-    description: "For hair that feels dry, weakened, or overworked by colour and heat."
+    description: "Restore strength and softness to hair that feels dry, weakened, or overworked by colour and heat."
   },
   {
     title: "Metal Detox Treatment + Blowdry",
     price: "Rs 1000",
-    description: "A clarifying treatment finished with a smooth blowdry and fresh shine."
+    description: "A detoxifying treatment and smooth blowdry for a cleaner feel, fresh shine, and easier styling."
   },
   {
     title: "Gel Manicure / Pedicure",
     price: "Rs 2500",
-    description: "Glossy, longer-lasting nail care with a neat salon finish."
+    description: "Glossy, longer-lasting nail colour with a neat salon finish for hands and feet."
   },
   {
     title: "Gold Facial",
     price: "Rs 1200",
-    description: "A facial for skin that needs brightness, softness, and a fresh glow."
+    description: "A brightening facial that leaves skin softer, calmer, and noticeably more radiant."
   },
   {
     title: "Diamond Facial",
     price: "Rs 1200",
-    description: "A brightening facial that leaves skin looking smoother and refreshed."
+    description: "A smoothing treatment that refreshes texture and brings back a clear, polished glow."
   }
 ];
 
 export const serviceCategories: ServiceCategory[] = [
   {
     eyebrow: "Hair care",
-    title: "Repair, detox, and smooth finishing.",
-    body: "For hair that needs softness, strength, shine, or a cleaner finish before styling."
+    title: "Repair, detox, colour, and smooth finishing.",
+    body: "For hair that needs strength, maintenance, shine, or a cleaner finish before styling."
   },
   {
     eyebrow: "Skin care",
-    title: "Facials that focus on brightness and freshness.",
-    body: "For skin that needs brightness, freshness, and a calmer finish."
+    title: "Facials for glow, comfort, and refreshed skin.",
+    body: "For dull, tired, or stressed skin that needs brightness, softness, and a more even finish."
   },
   {
     eyebrow: "Nail care",
-    title: "Neat gel finishing for hands and feet.",
-    body: "For a manicure or pedicure that feels tidy, glossy, and ready to wear."
+    title: "Gel manicures and pedicures with a lasting finish.",
+    body: "For neat hands and feet with glossy colour that stays fresh for longer."
   }
 ];
 
 export const promo = {
   eyebrow: "Signature treatment",
-  title: "A good place to start when hair feels dry, tired, or harder to manage.",
+  title: "Transform dry, tired hair into soft, strong, manageable strands.",
   body:
-    "The Absolute Repair Molecular Treatment is one of the services clients ask for most when hair needs softness, strength, and a smoother finish. It works especially well after colour, regular heat styling, or longer periods of dryness.",
+    "The Absolute Repair Molecular Treatment is one of the most-requested services at Sim's. It helps rebuild stressed hair, soften the lengths, and leave a smoother finish that clients notice straight away.",
   points: [
-    "Hair that feels rough through the lengths",
-    "Colour-treated hair that needs extra care",
-    "Clients who want softness without heaviness"
+    "Hair that feels rough or straw-like through the lengths",
+    "Colour-treated or frequently heat-styled hair needing intensive care",
+    "Anyone who wants noticeable softness without heaviness"
   ]
 };
 
-export const contactDetails: ContactDetail[] = [
-  {
-    label: "WhatsApp booking",
-    value: siteConfig.bookingWhatsappDisplay,
-    href: siteConfig.bookingWhatsappHref,
-    note: "Send the service you want and the day or time that suits you."
-  },
-  {
-    label: "Location",
-    value: siteConfig.addressLines[0],
-    href: siteConfig.directionsHref,
-    note: siteConfig.addressLines[1]
-  }
-];
-
-export const contactGuidance = [
-  "Send the service you want, or tell the salon what you need help with.",
-  "Share the day or time that suits you best.",
-  "The salon will reply with availability and the next step."
-];
-
-export const bookingContent = {
-  eyebrow: "Book your appointment",
-  title: "Ready to book? Send a WhatsApp message.",
-  body:
-    "Send the service you want and the day that suits you best. If you are still deciding, describe what you need and the salon will guide you.",
-  primaryCta: {
-    label: "Book on WhatsApp",
-    href: siteConfig.bookingWhatsappHref
-  },
-  secondaryCta: {
-    label: "Contact details",
-    href: "/contact"
+export const pageIntros: Record<"services", PageIntro> = {
+  services: {
+    eyebrow: "Services & pricing",
+    title: "Services and pricing in one clear menu.",
+    body:
+      "Start with the main categories, skim the most-booked treatments, then browse the full price list below. If you are unsure what to book, send a WhatsApp message first."
   }
 };
 
-export const homePageLinks: HomePageLink[] = [
-  {
-    eyebrow: "Services",
-    title: "See services, pricing, and the full menu.",
-    body: "Browse featured treatments first, then open the full price list below.",
-    href: "/services",
-    label: "Open services"
+export const finalCtas: Record<"landing" | "services", CtaContent> = {
+  landing: {
+    eyebrow: "Book or visit",
+    title: "Ready to book or head over?",
+    body:
+      "Message the salon on WhatsApp for appointments, or open directions before your visit to Flacq Retail Park.",
+    primaryCta: {
+      label: "Book on WhatsApp",
+      href: siteConfig.bookingWhatsappHref,
+      external: true
+    },
+    secondaryCta: {
+      label: "Get directions",
+      href: siteConfig.directionsHref,
+      external: true
+    }
   },
-  {
-    eyebrow: "Contact",
-    title: "Find booking details, hours, and directions.",
-    body: "Use the contact page for hours, location details, and booking help.",
-    href: "/contact",
-    label: "Contact details"
-  }
-];
-
-export const pageIntros: Record<"services" | "contact", PageIntro> = {
   services: {
-    eyebrow: "Services & pricing",
-    title: "A clear service menu with pricing.",
+    eyebrow: "Need help choosing?",
+    title: "Not sure which treatment suits you best?",
     body:
-      "Browse the featured treatments first, then the full price list. If you are not sure what suits you, send a WhatsApp message and the salon will help."
-  },
-  contact: {
-    eyebrow: "Contact",
-    title: "Everything you need to book or ask a question.",
-    body:
-      "WhatsApp is the main contact route for appointments, pricing questions, and service guidance. Send a message and the salon will reply from there."
+      "Send a WhatsApp message for service advice, availability, or help choosing between treatments. You can also open the original PDF menu.",
+    primaryCta: {
+      label: "Book on WhatsApp",
+      href: siteConfig.bookingWhatsappHref,
+      external: true
+    },
+    secondaryCta: {
+      label: "Open PDF",
+      href: siteConfig.priceListPdfHref,
+      external: true
+    }
   }
 };

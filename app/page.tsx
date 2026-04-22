@@ -1,15 +1,16 @@
-import { HeroSection } from "@/components/sections/hero-section";
-import { HomePagesSection } from "@/components/sections/home-pages-section";
+import { LandingPageTrialSection } from "@/components/sections/landing-page-trial-section";
 import { PromoSection } from "@/components/sections/promo-section";
 import { ServicesSection } from "@/components/sections/services-section";
+import { CTASection } from "@/components/ui/cta-section";
+import { finalCtas } from "@/content/site";
 
 export default function Home() {
   return (
     <main>
-      <HeroSection />
-      <ServicesSection />
+      <LandingPageTrialSection />
+      <ServicesSection mode="home" />
       <PromoSection />
-      <HomePagesSection />
+      <CTASection content={finalCtas.landing} variant="compact" />
     </main>
   );
 }

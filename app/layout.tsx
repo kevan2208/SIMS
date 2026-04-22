@@ -3,19 +3,70 @@ import Script from "next/script";
 
 import "./globals.css";
 
-import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: siteConfig.name,
-  description: siteConfig.description
+  metadataBase: new URL("https://simshairandbeauty.com"),
+  title: `${siteConfig.name} | Hair, Facials & Nails in ${siteConfig.location}`,
+  description: siteConfig.description,
+  keywords: [
+    "hair salon mauritius",
+    "beauty salon mauritius",
+    "facials mauritius",
+    "gel nails mauritius",
+    "hair treatment mauritius",
+    "salon flacq",
+    "hair repair treatment",
+    "molecular treatment",
+    "book salon whatsapp"
+  ].join(", "),
+  authors: [{ name: "Sim's Hair and Beauty" }],
+  creator: "Sim's Hair and Beauty",
+  publisher: "Sim's Hair and Beauty",
+  formatDetection: {
+    email: false,
+    telephone: false
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_MU",
+    url: "https://simshairandbeauty.com",
+    siteName: siteConfig.name,
+    title: `${siteConfig.name} | Hair, Facials & Nails`,
+    description: siteConfig.description,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    creator: "@simshairbeauty"
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true
+    }
+  }
 };
 
 export const viewport: Viewport = {
   width: "device-width",
-  initialScale: 1
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  colorScheme: "light"
 };
 
 export default function RootLayout({
@@ -23,9 +74,93 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: siteConfig.name,
+    description: siteConfig.description,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: siteConfig.addressLines[0].split(",")[0],
+      addressLocality: "Flacq",
+      addressRegion: siteConfig.location,
+      postalCode: "40606",
+      addressCountry: "MU"
+    },
+    telephone: siteConfig.bookingWhatsappDisplay.replace(/\s/g, ""),
+    image: "/og-image.png",
+    url: "https://simshairandbeauty.com",
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        opens: "08:30",
+        closes: "17:00"
+      }
+    ],
+    sameAs: siteConfig.socials.map((social) => social.href),
+    servesCuisine: ["Hair Care", "Skin Care", "Nail Care"]
+  };
+
   return (
     <html lang="en">
+      <head>
+        <Script
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          id="schema-organization"
+          type="application/ld+json"
+        />
+      </head>
       <body>
+        {/* Google Analytics */}
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+          strategy="afterInteractive"
+        />
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-XXXXXXXXXX', {
+                page_path: window.location.pathname,
+              });
+            `
+          }}
+          id="google-analytics"
+          strategy="afterInteractive"
+        />
+
+        {/* Facebook Pixel - Optional */}
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', 'XXXXXXXXXX');
+              fbq('track', 'PageView');
+            `
+          }}
+          id="facebook-pixel"
+          strategy="afterInteractive"
+        />
+        <noscript>
+          <img
+            height="1"
+            src="https://www.facebook.com/tr?id=XXXXXXXXXX&ev=PageView&noscript=1"
+            style={{ display: "none" }}
+            width="1"
+          />
+        </noscript>
+
         <Script id="tailwind-runtime-config" strategy="beforeInteractive">
           {`
             tailwind.config = {
@@ -80,7 +215,6 @@ export default function RootLayout({
         <Navbar />
         {children}
         <Footer />
-        <FloatingWhatsApp />
       </body>
     </html>
   );

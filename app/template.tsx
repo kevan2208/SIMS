@@ -3,5 +3,5 @@ export default function Template({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="page-shell-enter">{children}</div>;
+  return <div className="page-shell-enter page-under-nav">{children}</div>;
 }

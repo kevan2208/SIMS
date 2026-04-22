@@ -1,4 +1,4 @@
-import { priceListCategories, priceListHighlights } from "@/content/price-list";
+import { priceListCategories } from "@/content/price-list";
 import { siteConfig } from "@/content/site";
 
 import { Button } from "@/components/ui/button";
@@ -11,10 +11,13 @@ export function PriceListSection() {
       <Container>
         <Reveal className="section-frame px-5 py-6 sm:px-7 sm:py-7">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-3xl space-y-2">
+            <div className="max-w-3xl space-y-3">
               <p className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-brand-red">
                 Browse by category
               </p>
+              <h2 className="font-display text-[clamp(1.9rem,3.4vw,2.9rem)] leading-[1.02] tracking-[-0.03em] text-brand-ink">
+                Full price list
+              </h2>
               <p className="text-sm leading-7 text-brand-mist">
                 Some prices are marked from because they vary with hair length, product choice, or
                 time needed.
@@ -25,10 +28,7 @@ export function PriceListSection() {
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button href={siteConfig.bookingWhatsappHref} rel="noreferrer" target="_blank" variant="secondary">
-                Ask on WhatsApp
-              </Button>
-              <Button href={siteConfig.priceListPdfHref} rel="noreferrer" target="_blank" variant="ghost">
+              <Button href={siteConfig.priceListPdfHref} rel="noreferrer" target="_blank" variant="secondary">
                 Open PDF
               </Button>
               <Button download href={siteConfig.priceListPdfHref} variant="ghost">
@@ -52,45 +52,6 @@ export function PriceListSection() {
                   →
                 </span>
               </a>
-            ))}
-          </div>
-        </Reveal>
-
-        <Reveal className="mt-6 section-frame px-5 py-6 sm:px-7 sm:py-7" delayMs={80}>
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl space-y-2">
-              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-brand-red">
-                Most booked
-              </p>
-              <h2 className="font-display text-[clamp(1.85rem,3.2vw,2.8rem)] leading-[1.04] tracking-[-0.03em] text-brand-ink">
-                A few services clients ask for most.
-              </h2>
-            </div>
-            <Button href={siteConfig.bookingWhatsappHref} rel="noreferrer" target="_blank" variant="ghost">
-              Ask which one suits you
-            </Button>
-          </div>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {priceListHighlights.map((item, index) => (
-              <Reveal className="soft-panel h-full p-5" delayMs={index * 60 + 60} key={item.title}>
-                <div className="flex h-full flex-col gap-4">
-                  <div className="space-y-2">
-                    <p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-brand-red">
-                      {item.price}
-                    </p>
-                    <h3 className="max-w-[16ch] text-balance font-display text-[1.35rem] leading-[1.08] tracking-[-0.02em] text-brand-ink">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm leading-7 text-brand-mist">{item.note}</p>
-                  </div>
-                  <div className="pt-1">
-                    <Button href={item.href} variant="ghost">
-                      Find in price list
-                    </Button>
-                  </div>
-                </div>
-              </Reveal>
             ))}
           </div>
         </Reveal>

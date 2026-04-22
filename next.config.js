@@ -6,6 +6,21 @@ const nextConfig = {
         source: "/about",
         destination: "/",
         permanent: false
+      },
+      {
+        source: "/landingPageTrial",
+        destination: "/",
+        permanent: false
+      },
+      {
+        source: "/contact",
+        destination: "/#visit",
+        permanent: false
+      },
+      {
+        source: "/price-list",
+        destination: "/services#price-list",
+        permanent: false
       }
     ];
   },

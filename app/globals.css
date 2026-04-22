@@ -8,6 +8,9 @@
 html {
   scroll-behavior: smooth;
   background-color: var(--background);
+  /* Ensure proper viewport setup for mobile */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -26,8 +29,15 @@ body {
 }
 
 ::selection {
-  background-color: rgba(139, 38, 57, 0.2);
+  background-color: rgba(139, 38, 57, 0.25);
   color: #231217;
+}
+
+:focus-visible {
+  outline-offset: 2px;
+  outline-width: 2px;
+  outline-style: solid;
+  outline-color: rgba(139, 38, 57, 0.22);
 }
 
 main {
@@ -38,6 +48,11 @@ main {
   animation: pageShellEnter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.page-under-nav {
+  margin-top: -5.5rem;
+  padding-top: 5.5rem;
+}
+
 * {
   border-color: #ceb7bc;
   box-sizing: border-box;
@@ -45,8 +60,12 @@ main {
 
 a,
 button {
-  transition: color 300ms ease, background-color 300ms ease, border-color 300ms ease,
-    transform 300ms ease, box-shadow 300ms ease;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .anchor-section {
@@ -61,6 +80,7 @@ button {
   background:
     linear-gradient(180deg, rgba(249, 240, 242, 0.96), rgba(242, 229, 233, 0.92));
   box-shadow: 0 16px 40px rgba(87, 59, 55, 0.08), 0 6px 16px rgba(87, 59, 55, 0.04);
+  transition: box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .page-intro-surface {
@@ -103,6 +123,12 @@ button {
   background:
     linear-gradient(180deg, rgba(246, 235, 238, 0.95), rgba(239, 225, 229, 0.9));
   box-shadow: 0 16px 40px rgba(87, 59, 55, 0.08), 0 6px 16px rgba(87, 59, 55, 0.04);
+  transition: all 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.soft-panel:hover {
+  border-color: rgba(206, 183, 188, 1);
+  box-shadow: 0 20px 48px rgba(87, 59, 55, 0.12), 0 8px 20px rgba(87, 59, 55, 0.06);
 }
 
 .hairline {
@@ -120,6 +146,23 @@ button {
 
 .landing-trial-page {
   position: relative;
+  isolation: isolate;
+}
+
+.landing-top-surface {
+  background:
+    linear-gradient(180deg, rgba(248, 239, 241, 0.98) 0%, rgba(246, 236, 238, 0.95) 26%, rgba(243, 228, 233, 0.86) 54%, rgba(244, 232, 234, 0) 100%),
+    radial-gradient(circle at 50% 4rem, rgba(164, 71, 92, 0.13), transparent 20rem),
+    radial-gradient(circle at 18% 7rem, rgba(139, 38, 57, 0.07), transparent 18rem),
+    radial-gradient(circle at 82% 7rem, rgba(139, 38, 57, 0.07), transparent 18rem);
+}
+
+.landing-header-surface {
+  background:
+    linear-gradient(180deg, rgba(248, 239, 241, 0.98) 0%, rgba(246, 236, 238, 0.94) 62%, rgba(244, 232, 234, 0.82) 100%),
+    radial-gradient(circle at 50% 4rem, rgba(164, 71, 92, 0.1), transparent 18rem),
+    radial-gradient(circle at 16% 5rem, rgba(139, 38, 57, 0.06), transparent 16rem),
+    radial-gradient(circle at 84% 5rem, rgba(139, 38, 57, 0.06), transparent 16rem);
 }
 
 .landing-aura {
@@ -127,10 +170,11 @@ button {
     radial-gradient(circle at center, rgba(164, 71, 92, 0.12), transparent 18rem),
     radial-gradient(circle at top, rgba(139, 38, 57, 0.12), transparent 24rem);
   filter: blur(10px);
+  animation: landingAuraDrift 16s ease-in-out infinite;
 }
 
 .landing-logo-drop {
-  animation: landingLogoDrop 1200ms cubic-bezier(0.18, 0.9, 0.22, 1) both;
+  animation: landingLogoDrop 1450ms cubic-bezier(0.18, 0.9, 0.22, 1) both;
 }
 
 .landing-logo-halo {
@@ -139,26 +183,67 @@ button {
   z-index: -1;
   border-radius: 9999px;
   background:
-    radial-gradient(circle at center, rgba(164, 71, 92, 0.16), rgba(139, 38, 57, 0.06) 42%, transparent 66%);
-  filter: blur(24px);
+    radial-gradient(circle at center, rgba(164, 71, 92, 0.2), rgba(139, 38, 57, 0.08) 42%, transparent 68%);
+  filter: blur(30px);
   animation: landingHaloPulse 7.4s ease-in-out infinite;
 }
 
-.landing-copy-rise,
+.landing-logo-stage {
+  animation: landingLogoFloat 11s ease-in-out 1550ms infinite;
+}
+
+.landing-logo-mark {
+  filter: drop-shadow(0 24px 46px rgba(87, 59, 55, 0.12));
+}
+
+.landing-copy-rise > *,
+.landing-content-rise > *,
 .landing-info-card,
-.landing-content-rise,
 .landing-service-card,
 .landing-scroll-cue {
   opacity: 0;
-  animation: landingRise 900ms ease-out both;
+  animation: landingRise 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.landing-copy-rise {
-  animation-delay: 540ms;
+.landing-copy-rise > :nth-child(1) {
+  animation-delay: 620ms;
+}
+
+.landing-copy-rise > :nth-child(2) {
+  animation-delay: 760ms;
+}
+
+.landing-copy-rise > :nth-child(3) {
+  animation-delay: 900ms;
+}
+
+.landing-copy-rise > :nth-child(4) {
+  animation-delay: 1040ms;
+}
+
+.landing-content-rise > :nth-child(1) {
+  animation-delay: 220ms;
+}
+
+.landing-content-rise > :nth-child(2) {
+  animation-delay: 340ms;
+}
+
+.landing-content-rise > :nth-child(3) {
+  animation-delay: 460ms;
+}
+
+.landing-content-rise > :nth-child(4) {
+  animation-delay: 580ms;
+}
+
+.landing-info-card,
+.landing-service-card {
+  animation-name: landingCardReveal;
 }
 
 .landing-scroll-cue {
-  animation-delay: 980ms;
+  animation-delay: 1220ms;
 }
 
 .landing-scroll-cue span {
@@ -348,15 +433,23 @@ button {
 @keyframes landingLogoDrop {
   0% {
     opacity: 0;
-    transform: translate3d(0, -7rem, 0) scale(0.84);
+    filter: blur(14px);
+    transform: translate3d(0, -9rem, 0) scale(0.76) rotate(-2deg);
   }
-  68% {
+  58% {
     opacity: 1;
-    transform: translate3d(0, 0.65rem, 0) scale(1.02);
+    filter: blur(0);
+    transform: translate3d(0, 0.9rem, 0) scale(1.04) rotate(0.4deg);
+  }
+  78% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, -0.35rem, 0) scale(0.995) rotate(0deg);
   }
   100% {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
   }
 }
 
@@ -371,6 +464,15 @@ button {
   }
 }
 
+@keyframes landingAuraDrift {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0) scale(1.03);
+  }
+}
+
 @keyframes landingRise {
   0% {
     opacity: 0;
@@ -382,12 +484,32 @@ button {
   }
 }
 
+@keyframes landingCardReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 2rem, 0) scale(0.965);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
 @keyframes landingFloat {
   0%, 100% {
     transform: translate3d(0, 0, 0);
   }
   50% {
     transform: translate3d(0, -1rem, 0);
+  }
+}
+
+@keyframes landingLogoFloat {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
   }
 }
 
@@ -442,16 +564,81 @@ button {
   }
 }
 
+/* Mobile touch optimization */
+@media (max-width: 639px) {
+  a,
+  button,
+  input,
+  textarea,
+  select {
+    -webkit-touch-callout: none;
+  }
+
+  /* Ensure min 44px touch targets on mobile */
+  a,
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Link styling improvements */
+a[href^="http"]::after,
+a[target="_blank"]::after {
+  content: "";
+  display: inline-block;
+  margin-left: 0.25rem;
+}
+
+/* Improved link underlines for better readability */
+a:not([class*="button"]):not([class*="nav"]) {
+  position: relative;
+}
+
+/* Promo and booking surface polish */
+.promo-surface,
+.booking-surface {
+  transition: all 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Mobile-specific text improvements */
+@media (max-width: 639px) {
+  html {
+    font-size: 15px;
+  }
+
+  body {
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+
+  /* Improve readability on small screens */
+  p {
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-shell-enter,
   .page-loading-glow,
   .page-loading-logo,
   .page-loading-dots span,
   .landing-logo-drop,
+  .landing-logo-stage,
   .landing-logo-halo,
+  .landing-aura,
   .landing-copy-rise,
+  .landing-copy-rise > *,
   .landing-info-card,
   .landing-content-rise,
+  .landing-content-rise > *,
   .landing-service-card,
   .landing-scroll-cue,
   .landing-orbit-one,

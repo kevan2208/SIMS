@@ -4,7 +4,9 @@ import Script from "next/script";
 
 import "./globals.css";
 
+import { Analytics } from "@vercel/analytics/next";
 import { Footer } from "@/components/layout/footer";
+import { PageLoadOverlay } from "@/components/ui/page-load-overlay";
 import { Navbar } from "@/components/layout/navbar";
 import { siteConfig } from "@/content/site";
 
@@ -186,9 +188,11 @@ export default function RootLayout({
           src="https://cdn.tailwindcss.com"
           strategy="beforeInteractive"
         />
+        <PageLoadOverlay />
         <Navbar />
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

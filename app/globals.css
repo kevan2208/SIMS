@@ -527,6 +527,24 @@ button {
   overflow: hidden;
 }
 
+.page-reload-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #f4e8ea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 500ms ease, visibility 500ms ease;
+}
+
+.page-reload-overlay--fade {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .page-loading-card {
   position: relative;
   display: flex;

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export type ActionIconName = "facebook" | "file" | "instagram" | "map" | "whatsapp";
+export type ActionIconName = "facebook" | "file" | "instagram" | "map" | "phone" | "whatsapp";
 
 type ActionIconProps = {
   name: ActionIconName;
@@ -25,6 +25,10 @@ export function inferActionIcon({
 
   if (normalizedHref?.includes("wa.me") || normalizedLabel?.includes("whatsapp")) {
     return "whatsapp";
+  }
+
+  if (normalizedHref?.startsWith("tel:") || normalizedLabel?.includes("call") || normalizedLabel?.includes("fixed line")) {
+    return "phone";
   }
 
   if (normalizedHref?.includes("facebook.com") || normalizedLabel?.includes("facebook")) {
@@ -96,6 +100,13 @@ export function ActionIcon({ name, className }: ActionIconProps) {
           />
           <circle cx="12" cy="10.05" fill="currentColor" r="2.1" />
         </>
+      ) : null}
+
+      {name === "phone" ? (
+        <path
+          d="M6.2 4.7c.42-.42 1.08-.42 1.5 0l2.1 2.1c.39.39.42 1 .08 1.43l-1.12 1.45a1 1 0 0 0 .1 1.33l4.78 4.78a1 1 0 0 0 1.33.1l1.45-1.12a1.08 1.08 0 0 1 1.43.08l2.1 2.1c.42.42.42 1.08 0 1.5l-1.16 1.16c-.98.98-2.42 1.32-3.7.88a22.1 22.1 0 0 1-8.83-5.58 22.1 22.1 0 0 1-5.58-8.83 3.56 3.56 0 0 1 .88-3.7L6.2 4.7Z"
+          fill="currentColor"
+        />
       ) : null}
 
       {name === "file" ? (

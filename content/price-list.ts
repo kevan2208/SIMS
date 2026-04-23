@@ -54,18 +54,18 @@ export const priceListCategories: PriceListCategory[] = [
     items: [
       { name: "Shampoo L'Oreal", price: "From Rs 300" },
       { name: "Shampoo normal", price: "From Rs 200" },
-      { name: "Shampoo + Blowdry", price: "Rs 600 - 800" },
-      { name: "Blowdry only", price: "Rs 500 - 700" },
-      { name: "Blowdry + Steampod", price: "Rs 600 - 800" },
-      { name: "Shampoo + Blowdry + Steampod", price: "Rs 700 - 900" },
-      { name: "Shampoo + Haircut + Blowdry", price: "Rs 1000 - 1200" },
+      { name: "Shampoo + Blowdry", price: "Rs 600 to 800" },
+      { name: "Blowdry only", price: "Rs 500 to 700" },
+      { name: "Blowdry + Steampod", price: "Rs 600 to 800" },
+      { name: "Shampoo + Blowdry + Steampod", price: "Rs 700 to 900" },
+      { name: "Shampoo + Haircut + Blowdry", price: "Rs 1000 to 1200" },
       { name: "Haircut only", price: "From Rs 500" },
       { name: "Shampoo + Haircut", price: "From Rs 700" },
       { name: "Men's haircut", price: "From Rs 250" },
       { name: "Men's haircut + Shampoo", price: "From Rs 400" },
       { name: "Men's haircut + Shampoo + Colour", price: "From Rs 800" },
       { name: "Men's Lissage Extenso", price: "From Rs 2000" },
-      { name: "Child's haircut (0 - 5 years)", price: "From Rs 400" }
+      { name: "Child's haircut (0 to 5 years)", price: "From Rs 400" }
     ]
   },
   {
@@ -81,16 +81,16 @@ export const priceListCategories: PriceListCategory[] = [
       { name: "Schwarzkopf (10 mins)", price: "From Rs 1300" },
       { name: "Application of own colour roots", price: "Rs 500" },
       { name: "Application of own colour full head", price: "Rs 700" },
-      { name: "Full head colour - short", price: "Rs 2500" },
-      { name: "Full head colour - medium", price: "Rs 3000" },
-      { name: "Full head colour - long", price: "Rs 3500 - 6000" },
-      { name: "Highlights - 1/2 head", price: "Rs 1500" },
-      { name: "Highlights - 3/4 head", price: "Rs 2000" },
-      { name: "Highlights - full head", price: "Rs 2500 - 3500" },
-      { name: "Toner - normal", price: "Rs 1500 - 3500" },
-      { name: "Toner - Dialight", price: "From Rs 200" },
-      { name: "Rene Blanche - roots only", price: "From Rs 600" },
-      { name: "Rene Blanche - full head", price: "From Rs 1500" }
+      { name: "Full head colour short", price: "Rs 2500" },
+      { name: "Full head colour medium", price: "Rs 3000" },
+      { name: "Full head colour long", price: "Rs 3500 to 6000" },
+      { name: "Highlights 1/2 head", price: "Rs 1500" },
+      { name: "Highlights 3/4 head", price: "Rs 2000" },
+      { name: "Highlights full head", price: "Rs 2500 to 3500" },
+      { name: "Toner normal", price: "Rs 1500 to 3500" },
+      { name: "Toner Dialight", price: "From Rs 200" },
+      { name: "Rene Blanche roots only", price: "From Rs 600" },
+      { name: "Rene Blanche full head", price: "From Rs 1500" }
     ]
   },
   {
@@ -101,8 +101,8 @@ export const priceListCategories: PriceListCategory[] = [
       { name: "Organic protein Keratine", price: "From Rs 6000" },
       { name: "Lissage Brazilian Extenso", price: "From Rs 7000" },
       { name: "Protein de Soi (L'Oreal)", price: "From Rs 8000" },
-      { name: "Metal Detox treatment", price: "Rs 600 - 800" },
-      { name: "Pro Longer treatment", price: "Rs 600 - 800" },
+      { name: "Metal Detox treatment", price: "Rs 600 to 800" },
+      { name: "Pro Longer treatment", price: "Rs 600 to 800" },
       { name: "Dandruff and greasy hair treatment", price: "Rs 600" },
       { name: "Head massage (20 mins) with premium oil / hair loss prevention", price: "Rs 600" },
       { name: "Head massage (20 mins) with normal oil", price: "Rs 500" }
@@ -168,7 +168,7 @@ export const priceListCategories: PriceListCategory[] = [
       { name: "Coiffure", price: "Rs 900" },
       { name: "French roll (coquille)", price: "Rs 600" },
       { name: "Curls only", price: "Rs 700" },
-      { name: "Braid", price: "Rs 200 - 500" },
+      { name: "Braid", price: "Rs 200 to 500" },
       { name: "Coiffure + Makeup + Fake lashes", price: "Rs 2000" }
     ]
   },

@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import logoImage from "@/public/logo-sims-hair-beauty.png";
 
 import { cn } from "@/lib/utils";
@@ -21,13 +19,19 @@ export function LogoLockup({
   className,
   priority = false
 }: LogoLockupProps) {
+  void priority;
+
   return (
-    <div className={cn("relative", variantClassNames[variant], className)}>
-      <Image
-        alt="Sim's Hair and Beauty logo"
-        className="h-auto w-full"
-        priority={priority}
-        src={logoImage}
+    <div className={cn("relative logo-protected", variantClassNames[variant], className)}>
+      <span
+        aria-label="Sim's Hair and Beauty logo"
+        className="logo-rendered-mark logo-protected block w-full"
+        draggable={false}
+        role="img"
+        style={{
+          aspectRatio: `${logoImage.width} / ${logoImage.height}`,
+          backgroundImage: `url(${logoImage.src})`
+        }}
       />
     </div>
   );

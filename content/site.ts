@@ -45,28 +45,32 @@ export type VisitFact = {
   eyebrow: string;
   title: string;
   body: string;
+  action?: CtaAction;
 };
 
 const bookingMessage =
   "Hello Sim's Hair and Beauty, I would like to book an appointment. Could you please share your availability?";
 
 const salonWhatsappNumber = "23057718511";
+const fixedLineNumber = "2304138644";
 
 export const siteConfig = {
   name: "Sim's Hair and Beauty",
-  description: "Hair, facials, and nail appointments in Mauritius. Book on WhatsApp.",
+  description: "Hair, facials, and nail care in Flacq, Mauritius. Book on WhatsApp.",
   location: "Mauritius",
   bookingWhatsappDisplay: "+230 5771 8511",
   bookingWhatsappHref: `https://wa.me/${salonWhatsappNumber}?text=${encodeURIComponent(bookingMessage)}`,
-  bookingWhatsappLabel: "Book on WhatsApp",
+  bookingWhatsappLabel: "WhatsApp booking",
+  fixedLineDisplay: "+230 413 8644",
+  fixedLineHref: `tel:+${fixedLineNumber}`,
   addressLines: [
     "Flacq Retail Park, Mauritius, 40606",
-    "Use WhatsApp for directions, service advice, and booking help."
+    "Use WhatsApp for booking and use the salon fixed line for direct calls."
   ],
   directionsHref:
-    "https://www.google.com/maps?um=1&ie=UTF-8&fb=1&gl=mu&sa=X&geocode=KdE3PGh5-XwhMQeos8RM6xda&daddr=Flacq+Retail+Park,+MU,+40606",
+    "https://www.google.com/maps/place/Sim%E2%80%99s+Hair+%26+Beauty/@-20.2011771,57.7206667,17z/data=!3m1!4b1!4m6!3m5!1s0x217cf979683c37d1:0x5a17eb4cc4b3a807!8m2!3d-20.2011771!4d57.7206667!16s%2Fg%2F11fzf99wfw?entry=ttu&g_ep=EgoyMDI2MDQyMC4wIKXMDSoASAFQAw%3D%3D",
   hours: [
-    { label: "Monday to Saturday", value: "08:30 - 17:00" },
+    { label: "Monday to Saturday", value: "08:30 to 17:30" },
     { label: "Sunday", value: "Closed" }
   ] satisfies BusinessHour[],
   priceListHref: "/services#price-list",
@@ -88,28 +92,48 @@ export const navItems: NavItem[] = [
 export const landingHero = {
   eyebrow: "Sim's Hair and Beauty • Flacq, Mauritius",
   title: "Hair, facials, and nails in one calm salon space.",
-  body: "Book on WhatsApp, browse the service menu, or open directions before your visit."
+  body: "Appointments are usually arranged on WhatsApp. Browse the service menu and check directions before your visit.",
+  trustNote: "Monday to Saturday, 08:30 to 17:30 • Flacq Retail Park"
 };
 
 export const landingVisit = {
-  eyebrow: "Visit & book",
-  title: "Everything you need before your visit.",
-  body: "Use WhatsApp to arrange your appointment, check the opening hours, and open directions before heading to the salon.",
+  eyebrow: "Visit and book",
+  title: "Plan your visit before you come in.",
+  body: "Book on WhatsApp, check the opening hours, call the salon directly if needed, and open directions before you travel.",
   facts: [
     {
       eyebrow: "WhatsApp booking",
       title: siteConfig.bookingWhatsappDisplay,
-      body: "Appointments and service questions are handled directly on WhatsApp."
+      body: "Appointments and service questions are usually handled on WhatsApp.",
+      action: {
+        label: "Book on WhatsApp",
+        href: siteConfig.bookingWhatsappHref,
+        external: true
+      }
+    },
+    {
+      eyebrow: "Salon fixed line",
+      title: siteConfig.fixedLineDisplay,
+      body: "Use the fixed line when you want to call the salon directly.",
+      action: {
+        label: "Call fixed line",
+        href: siteConfig.fixedLineHref
+      }
     },
     {
       eyebrow: "Opening hours",
-      title: "08:30 - 17:00",
+      title: "08:30 to 17:30",
       body: "Monday to Saturday. Sunday is closed."
     },
     {
       eyebrow: "Location",
       title: "Flacq Retail Park",
-      body: "Mauritius, 40606. Open directions before you travel."
+      body: "Mauritius, 40606. Open directions before you set off.",
+      action: {
+        label: "Get directions",
+        href: siteConfig.directionsHref,
+        external: true
+      }
     }
   ] satisfies VisitFact[]
 };
@@ -162,56 +186,57 @@ export const serviceCategories: ServiceCategory[] = [
 
 export const promo = {
   eyebrow: "Signature treatment",
-  title: "Transform dry, tired hair into soft, strong, manageable strands.",
+  title: "Absolute Repair Molecular Treatment",
   body:
-    "The Absolute Repair Molecular Treatment is one of the most-requested services at Sim's. It helps rebuild stressed hair, soften the lengths, and leave a smoother finish that clients notice straight away.",
+    "Our signature repair service uses the L'Oreal Professionnel Absolut Repair Molecular protocol with Peptides Bonder and amino acids. It is suited to damaged, colour treated, or heat stressed hair that needs strength, softness, and movement without heaviness.",
+  supportingNote:
+    "This in salon protocol is designed for deeper repair and a smoother finish clients can feel from the first appointment.",
+  productTitle: "L'Oreal Professionnel",
+  productLabel: "Absolut Repair Molecular",
+  productImage: "/products/absolut-repair-molecular-treatment.jpg",
+  productRangeImage: "/products/absolut-repair-molecular-range.jpg",
   points: [
-    "Hair that feels rough or straw-like through the lengths",
-    "Colour-treated or frequently heat-styled hair needing intensive care",
-    "Anyone who wants noticeable softness without heaviness"
+    "Hair that feels rough or straw like through the lengths",
+    "Colour treated or frequently heat styled hair needing intensive care",
+    "Clients who want softer, smoother lengths with natural movement"
   ]
 };
 
 export const pageIntros: Record<"services", PageIntro> = {
   services: {
-    eyebrow: "Services & pricing",
-    title: "Services and pricing in one clear menu.",
-    body:
-      "Start with the main categories, skim the most-booked treatments, then browse the full price list below. If you are unsure what to book, send a WhatsApp message first."
+    eyebrow: "Price list",
+    title: "Services and pricing",
+    body: "Browse the menu by category below, or open the original PDF if you need the full sheet."
   }
 };
 
 export const finalCtas: Record<"landing" | "services", CtaContent> = {
   landing: {
-    eyebrow: "Book or visit",
-    title: "Ready to book or head over?",
-    body:
-      "Message the salon on WhatsApp for appointments, or open directions before your visit to Flacq Retail Park.",
+    eyebrow: "Before you come in",
+    title: "Need directions before you head over?",
+    body: "Open the route to Flacq Retail Park or call the salon fixed line before your visit.",
     primaryCta: {
-      label: "Book on WhatsApp",
-      href: siteConfig.bookingWhatsappHref,
-      external: true
-    },
-    secondaryCta: {
       label: "Get directions",
       href: siteConfig.directionsHref,
       external: true
+    },
+    secondaryCta: {
+      label: "Call fixed line",
+      href: siteConfig.fixedLineHref
     }
   },
   services: {
-    eyebrow: "Need help choosing?",
-    title: "Not sure which treatment suits you best?",
-    body:
-      "Send a WhatsApp message for service advice, availability, or help choosing between treatments. You can also open the original PDF menu.",
+    eyebrow: "Need help choosing",
+    title: "Want help before you book?",
+    body: "Send a WhatsApp message for service advice or call the salon directly.",
     primaryCta: {
       label: "Book on WhatsApp",
       href: siteConfig.bookingWhatsappHref,
       external: true
     },
     secondaryCta: {
-      label: "Open PDF",
-      href: siteConfig.priceListPdfHref,
-      external: true
+      label: "Call fixed line",
+      href: siteConfig.fixedLineHref
     }
   }
 };

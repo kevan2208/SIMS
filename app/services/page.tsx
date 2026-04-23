@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PriceListSection } from "@/components/sections/price-list-section";
-import { ServicesSection } from "@/components/sections/services-section";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { CTASection } from "@/components/ui/cta-section";
@@ -33,21 +32,15 @@ export default function ServicesPage() {
       <Container>
         <PageIntro
           action={
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button href={siteConfig.bookingWhatsappHref} rel="noreferrer" target="_blank">
-                {siteConfig.bookingWhatsappLabel}
-              </Button>
-              <Button href={siteConfig.priceListPdfHref} rel="noreferrer" target="_blank" variant="secondary">
-                Open PDF
-              </Button>
-            </div>
+            <Button className="w-full justify-center sm:w-auto" href={siteConfig.priceListPdfHref} rel="noreferrer" target="_blank" variant="secondary">
+              Open PDF
+            </Button>
           }
           body={pageIntros.services.body}
           eyebrow={pageIntros.services.eyebrow}
           title={pageIntros.services.title}
         />
       </Container>
-      <ServicesSection mode="page" />
       <PriceListSection />
       <CTASection content={finalCtas.services} />
     </main>

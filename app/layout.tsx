@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Manrope, Prata } from "next/font/google";
 import Script from "next/script";
 
 import "./globals.css";
@@ -7,10 +8,27 @@ import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { siteConfig } from "@/content/site";
 
+const displayFont = Prata({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-display",
+  display: "swap"
+});
+
+const bodyFont = Manrope({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body",
+  display: "swap"
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://simshairandbeauty.com"),
   title: `${siteConfig.name} | Hair, Facials & Nails in ${siteConfig.location}`,
   description: siteConfig.description,
+  alternates: {
+    canonical: "/"
+  },
   keywords: [
     "hair salon mauritius",
     "beauty salon mauritius",
@@ -38,7 +56,7 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: siteConfig.name
@@ -49,7 +67,13 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
-    creator: "@simshairbeauty"
+    creator: "@simshairbeauty",
+    images: ["/twitter-image"]
+  },
+  icons: {
+    icon: "/logo-sims-hair-beauty.png",
+    shortcut: "/logo-sims-hair-beauty.png",
+    apple: "/logo-sims-hair-beauty.png"
   },
   robots: {
     index: true,
@@ -87,19 +111,18 @@ export default function RootLayout({
       postalCode: "40606",
       addressCountry: "MU"
     },
-    telephone: siteConfig.bookingWhatsappDisplay.replace(/\s/g, ""),
-    image: "/og-image.png",
+    telephone: siteConfig.fixedLineDisplay.replace(/\s/g, ""),
+    image: "/opengraph-image",
     url: "https://simshairandbeauty.com",
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         opens: "08:30",
-        closes: "17:00"
+        closes: "17:30"
       }
     ],
-    sameAs: siteConfig.socials.map((social) => social.href),
-    servesCuisine: ["Hair Care", "Skin Care", "Nail Care"]
+    sameAs: siteConfig.socials.map((social) => social.href)
   };
 
   return (
@@ -111,56 +134,7 @@ export default function RootLayout({
           type="application/ld+json"
         />
       </head>
-      <body>
-        {/* Google Analytics */}
-        <Script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
-          strategy="afterInteractive"
-        />
-        <Script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-XXXXXXXXXX', {
-                page_path: window.location.pathname,
-              });
-            `
-          }}
-          id="google-analytics"
-          strategy="afterInteractive"
-        />
-
-        {/* Facebook Pixel - Optional */}
-        <Script
-          dangerouslySetInnerHTML={{
-            __html: `
-              !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)}(window, document,'script',
-              'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', 'XXXXXXXXXX');
-              fbq('track', 'PageView');
-            `
-          }}
-          id="facebook-pixel"
-          strategy="afterInteractive"
-        />
-        <noscript>
-          <img
-            height="1"
-            src="https://www.facebook.com/tr?id=XXXXXXXXXX&ev=PageView&noscript=1"
-            style={{ display: "none" }}
-            width="1"
-          />
-        </noscript>
-
+      <body className={`${displayFont.variable} ${bodyFont.variable}`}>
         <Script id="tailwind-runtime-config" strategy="beforeInteractive">
           {`
             tailwind.config = {
@@ -182,8 +156,8 @@ export default function RootLayout({
                     }
                   },
                   fontFamily: {
-                    display: ["var(--font-display)", "Georgia", "Cambria", "Times New Roman", "serif"],
-                    body: ["var(--font-body)", "Avenir Next", "Segoe UI", "Helvetica Neue", "Arial", "sans-serif"]
+                    display: ["var(--font-display)", "Bodoni 72", "Baskerville", "Palatino Linotype", "serif"],
+                    body: ["var(--font-body)", "Segoe UI", "Helvetica Neue", "Arial", "sans-serif"]
                   },
                   boxShadow: {
                     soft: "0 16px 40px rgba(87, 59, 55, 0.08), 0 6px 16px rgba(87, 59, 55, 0.04)",

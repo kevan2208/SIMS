@@ -1,5 +1,6 @@
 .next
 .next-check
+.claude
 node_modules
 output
 tmp

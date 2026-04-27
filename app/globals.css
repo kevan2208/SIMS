@@ -301,6 +301,16 @@ button {
   -webkit-user-drag: none;
 }
 
+.logo-home-link {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.logo-home-link:focus,
+.logo-home-link:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .hairline {
   height: 1px;
   width: 4rem;
@@ -953,6 +963,7 @@ a:not([class*="button"]):not([class*="nav"]) {
     -webkit-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    padding-bottom: 6rem;
   }
 
   /* Improve readability on small screens */
@@ -963,6 +974,14 @@ a:not([class*="button"]):not([class*="nav"]) {
   h1, h2, h3, h4, h5, h6 {
     word-wrap: break-word;
     overflow-wrap: break-word;
+  }
+
+  .mobile-two-line-clamp {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 }
 

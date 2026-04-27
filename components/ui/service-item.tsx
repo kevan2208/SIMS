@@ -8,6 +8,7 @@ type ServiceItemProps = {
   index: number;
   className?: string;
   variant?: "featured" | "compact";
+  mobileViewHref?: string;
   action?: {
     label: string;
     href: string;
@@ -20,6 +21,7 @@ export function ServiceItem({
   index,
   className,
   variant = "compact",
+  mobileViewHref,
   action
 }: ServiceItemProps) {
   const itemNumber = String(index + 1).padStart(2, "0");
@@ -91,7 +93,15 @@ export function ServiceItem({
             <h3 className="max-w-[16ch] text-balance font-display text-[1.28rem] leading-[1.08] tracking-[-0.02em] text-brand-ink transition-colors duration-300 group-hover:text-[#261f20]">
               {service.title}
             </h3>
-            <p className="text-sm leading-7 text-brand-mist">{service.description}</p>
+            <p className="mobile-two-line-clamp text-sm leading-7 text-brand-mist">{service.description}</p>
+            {mobileViewHref ? (
+              <a
+                className="inline-flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-brand-red sm:hidden"
+                href={mobileViewHref}
+              >
+                View services
+              </a>
+            ) : null}
           </div>
         </>
       )}

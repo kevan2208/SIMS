@@ -10,14 +10,14 @@ export function LandingPageTrialSection() {
       <div className="landing-top-surface pointer-events-none absolute inset-x-0 top-0 -z-10 h-[56rem]" />
       <div className="hero-grid pointer-events-none absolute inset-x-0 top-0 -z-10 h-[28rem] opacity-[0.14]" />
       <div className="landing-aura pointer-events-none absolute inset-x-0 top-[-6rem] -z-10 h-[42rem]" />
-      <section className="relative overflow-hidden pb-10 pt-2 sm:min-h-[calc(100svh-5rem)] sm:pb-20 sm:pt-4">
-        <Container className="relative flex flex-col items-center justify-start pb-10 pt-5 text-center sm:min-h-[calc(100svh-5rem)] sm:justify-center sm:pb-20 sm:pt-8">
+      <section className="relative overflow-hidden pb-8 pt-1 sm:min-h-[calc(100svh-5rem)] sm:pb-20 sm:pt-4">
+        <Container className="relative flex flex-col items-center justify-start pb-8 pt-3 text-center sm:min-h-[calc(100svh-5rem)] sm:justify-center sm:pb-20 sm:pt-8">
           <div className="landing-orbit landing-orbit-one orbit-ring" />
           <div className="landing-orbit landing-orbit-two orbit-ring" />
 
-          <div className="landing-logo-drop relative z-10 flex flex-col items-center" data-hero-logo-anchor>
+          <div className="landing-logo-drop relative z-10 flex flex-col items-center">
             <div className="landing-logo-halo" />
-            <div className="landing-logo-stage">
+            <div className="landing-logo-stage" data-hero-logo-anchor>
               <LogoLockup
                 className="landing-logo-mark w-[15.5rem] sm:w-[30rem] md:w-[46rem] lg:w-[58rem] xl:w-[68rem]"
                 priority
@@ -26,7 +26,7 @@ export function LandingPageTrialSection() {
             </div>
           </div>
 
-          <div className="landing-copy-rise relative z-10 mt-4 max-w-3xl space-y-4 sm:mt-8 sm:space-y-6">
+          <div className="landing-copy-rise relative z-10 mt-3 max-w-3xl space-y-3 sm:mt-8 sm:space-y-6">
             <div className="flex items-center justify-center gap-3 sm:gap-4">
               <div className="hairline" />
               <p className="text-[0.69rem] font-semibold uppercase tracking-[0.28em] text-brand-red sm:text-[0.74rem] sm:tracking-[0.34em]">
@@ -40,7 +40,7 @@ export function LandingPageTrialSection() {
             <p className="mx-auto max-w-[30rem] text-pretty text-[0.95rem] leading-7 text-brand-mist sm:max-w-[34rem] sm:text-lg sm:leading-8">
               {landingHero.body}
             </p>
-            <div className="flex w-full max-w-sm flex-col items-center justify-center gap-3 sm:max-w-none sm:flex-row">
+            <div className="flex w-full max-w-sm flex-col items-center justify-center gap-2.5 sm:max-w-none sm:flex-row sm:gap-3">
               <Button className="w-full sm:w-auto" href={siteConfig.bookingWhatsappHref} rel="noreferrer" size="lg" target="_blank">
                 Book on WhatsApp
               </Button>

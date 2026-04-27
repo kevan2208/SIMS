@@ -69,7 +69,7 @@ export function ServicesSection({ mode = "home" }: ServicesSectionProps) {
               action={
                 siteConfig.priceListHref ? (
                   <Button href={siteConfig.priceListHref} variant="secondary">
-                    View services & pricing
+                    View services
                   </Button>
                 ) : null
               }
@@ -90,7 +90,11 @@ export function ServicesSection({ mode = "home" }: ServicesSectionProps) {
           <div className={`grid gap-4 ${isPage ? "sm:grid-cols-2" : ""}`}>
             {otherServices.map((service, index) => (
               <Reveal className="h-full" delayMs={(index + 1) * 70} key={service.title}>
-                <ServiceItem index={index + 1} service={service} />
+                <ServiceItem
+                  index={index + 1}
+                  mobileViewHref={!isPage ? siteConfig.priceListHref : undefined}
+                  service={service}
+                />
               </Reveal>
             ))}
           </div>

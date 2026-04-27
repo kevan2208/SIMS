@@ -8,7 +8,7 @@ import { navItems, siteConfig } from "@/content/site";
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { controlPillClass, navPillContainerClass } from "@/components/ui/control-styles";
+import { navPillContainerClass } from "@/components/ui/control-styles";
 import { LogoLockup } from "@/components/ui/logo-lockup";
 import { NavLink } from "@/components/ui/nav-link";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,6 @@ import { cn } from "@/lib/utils";
 export function Navbar() {
   const pathname = usePathname();
   const isLandingHome = pathname === "/";
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showLandingBrand, setShowLandingBrand] = useState(() => !isLandingHome);
 
   useEffect(() => {
@@ -54,7 +53,7 @@ export function Navbar() {
         },
         {
           root: null,
-          threshold: 0.18,
+          threshold: 0,
           rootMargin: "-78px 0px 0px 0px"
         }
       );
@@ -77,35 +76,31 @@ export function Navbar() {
     };
   }, [isLandingHome]);
 
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
-
-  const closeMenu = () => setIsMenuOpen(false);
-  const brandSlot = isLandingHome ? (
-    <div aria-hidden="true" className="relative w-[10.5rem] sm:w-[12.5rem]">
+  const brandSlot = (
       <Link
         aria-label="Sim's Hair and Beauty home"
         className={cn(
-          "absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-500 ease-out",
-          showLandingBrand
-            ? "translate-y-[-50%] opacity-100"
-            : "pointer-events-none translate-y-[calc(-50%-0.35rem)] opacity-0"
-        )}
-        href="/"
-        onClick={closeMenu}
-      >
-        <LogoLockup priority variant="navbar" />
-      </Link>
-    </div>
-  ) : (
-    <Link
-      aria-label="Sim's Hair and Beauty home"
-      className="translate-y-0 opacity-100 transition-all duration-500 ease-out"
+          "logo-home-link transition-all duration-500 ease-out",
+          isLandingHome
+            ? showLandingBrand
+              ? "translate-y-0 opacity-100"
+              : "pointer-events-none translate-y-[1px] opacity-0"
+          : "translate-y-0 opacity-100"
+      )}
       href="/"
-      onClick={closeMenu}
     >
-      <LogoLockup priority variant="navbar" />
+      <LogoLockup
+        className={cn(
+          "transition-all duration-500 ease-out",
+          isLandingHome
+            ? showLandingBrand
+              ? "w-[10.5rem] sm:w-[12.5rem]"
+              : "w-[8.9rem] sm:w-[12.5rem]"
+            : "w-[10.5rem] sm:w-[12.5rem]"
+        )}
+        priority
+        variant="navbar"
+      />
     </Link>
   );
 
@@ -114,19 +109,19 @@ export function Navbar() {
       className="landing-header-solid sticky top-0 z-[60] isolate border-b transition-all duration-300 ease-out"
     >
       <Container className="relative z-10">
-        <div className="flex min-h-20 items-center justify-between gap-4 py-3">
+        <div className="flex min-h-20 items-center justify-between gap-3 py-3">
           {brandSlot}
 
           <nav
             className={cn(
-              "hidden items-center md:flex",
+              "flex items-center",
               navPillContainerClass
             )}
           >
             {navItems.map((item) => (
               <NavLink
                 active={pathname === item.href}
-                className="min-w-[6.5rem] justify-center text-center"
+                className="min-w-[5.4rem] justify-center px-3 py-2 text-center text-[0.82rem] sm:min-w-[6.5rem] sm:px-4 sm:py-2.5 sm:text-sm"
                 href={item.href}
                 key={item.href}
                 label={item.label}
@@ -135,7 +130,7 @@ export function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="hidden items-center gap-3 lg:flex">
             <Button
               className="px-6"
               href={siteConfig.bookingWhatsappHref}
@@ -146,56 +141,28 @@ export function Navbar() {
               {siteConfig.bookingWhatsappLabel}
             </Button>
           </div>
-
-          <button
-            aria-controls="mobile-navigation"
-            aria-expanded={isMenuOpen}
-            className={cn(
-              "inline-flex min-h-11 items-center justify-center px-4 text-sm font-medium text-brand-ink md:hidden",
-              controlPillClass
-            )}
-            onClick={() => setIsMenuOpen((open) => !open)}
-            type="button"
-          >
-            {isMenuOpen ? "Close" : "Menu"}
-          </button>
         </div>
       </Container>
 
-      <div
-        className={cn(
-          "relative z-10 border-t md:hidden",
-          "border-brand-stone/70 bg-[linear-gradient(180deg,rgba(248,239,241,0.98),rgba(244,233,236,0.96))]",
-          isMenuOpen ? "block" : "hidden"
-        )}
-        id="mobile-navigation"
-      >
-        <Container className="py-5">
-          <nav className="flex flex-col gap-4">
-            {navItems.map((item) => (
-              <NavLink
-                active={pathname === item.href}
-                className="text-base"
-                href={item.href}
-                key={item.href}
-                label={item.label}
-                onClick={closeMenu}
-                tone="landing"
-              />
-            ))}
-            <div className="mt-4 flex flex-col gap-3">
-              <Button
-                className="px-6"
-                href={siteConfig.bookingWhatsappHref}
-                rel="noreferrer"
-                target="_blank"
-                variant="primary"
-              >
-                {siteConfig.bookingWhatsappLabel}
-              </Button>
-            </div>
-          </nav>
-        </Container>
+      <div className="mobile-action-bar pointer-events-none fixed inset-x-0 bottom-0 z-[70] px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 sm:hidden">
+        <div className="mx-auto flex max-w-xl items-center gap-2 rounded-[1.15rem] border border-brand-stone/78 bg-[linear-gradient(180deg,rgba(248,239,241,0.98),rgba(244,233,236,0.96))] p-2 shadow-[0_20px_36px_rgba(87,59,55,0.12)]">
+          <Button
+            className="pointer-events-auto w-full justify-center px-4"
+            href={siteConfig.bookingWhatsappHref}
+            rel="noreferrer"
+            target="_blank"
+            variant="primary"
+          >
+            WhatsApp
+          </Button>
+          <Button
+            className="pointer-events-auto w-full justify-center px-4"
+            href={siteConfig.fixedLineHref}
+            variant="secondary"
+          >
+            Call
+          </Button>
+        </div>
       </div>
     </header>
   );

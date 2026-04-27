@@ -1,8 +1,10 @@
 "use client";
 
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { priceListCategories, priceListHighlights } from "@/content/price-list";
+import { siteConfig } from "@/content/site";
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -12,26 +14,30 @@ import { cn } from "@/lib/utils";
 
 type FilterKey = "all" | "hair" | "skin-body" | "nails" | "occasion";
 
-const filterConfig: Array<{ key: FilterKey; label: string; match: (id: string) => boolean }> = [
-  { key: "all", label: "All", match: () => true },
+const filterConfig: Array<{ key: FilterKey; label: string; categoryIds?: string[]; match: (id: string) => boolean }> = [
+  { key: "all", label: "All categories", match: () => true },
   {
     key: "hair",
     label: "Hair",
+    categoryIds: ["hair-care", "hair-colour", "hair-treatments"],
     match: (id) => ["hair-care", "hair-colour", "hair-treatments"].includes(id)
   },
   {
     key: "skin-body",
     label: "Skin & body",
+    categoryIds: ["facial-body-care", "threading", "waxing", "body-massage"],
     match: (id) => ["facial-body-care", "threading", "waxing", "body-massage"].includes(id)
   },
   {
     key: "nails",
     label: "Nails",
+    categoryIds: ["hand-foot-care"],
     match: (id) => ["hand-foot-care"].includes(id)
   },
   {
     key: "occasion",
     label: "Occasion",
+    categoryIds: ["styling-makeup", "wedding-home-service"],
     match: (id) => ["styling-makeup", "wedding-home-service"].includes(id)
   }
 ];
@@ -40,11 +46,32 @@ function sameIds(left: string[], right: string[]) {
   return left.length === right.length && left.every((item, index) => item === right[index]);
 }
 
+type SelectedService = {
+  categoryEyebrow: string;
+  categoryTitle: string;
+  categoryNote?: string;
+  name: string;
+  price: string;
+};
+
+const popularShortcuts = [
+  { label: "Absolute Repair", categoryId: "hair-treatments" },
+  { label: "Hair Colour", categoryId: "hair-colour" },
+  { label: "Gold Facial", categoryId: "facial-body-care" },
+  { label: "Gel Nails", categoryId: "hand-foot-care" }
+];
+
+const previewItemCount = 4;
+
 export function PriceListSection() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>("all");
   const [query, setQuery] = useState("");
+  const [selectedJumpCategoryId, setSelectedJumpCategoryId] = useState("");
   const [expandedCategoryIds, setExpandedCategoryIds] = useState<string[]>([]);
+  const [expandedPriceCategoryIds, setExpandedPriceCategoryIds] = useState<string[]>([]);
   const [highlightedCategoryId, setHighlightedCategoryId] = useState<string | null>(null);
+  const [selectedService, setSelectedService] = useState<SelectedService | null>(null);
+  const closeServiceSheet = useCallback(() => setSelectedService(null), []);
   const highlightTimeoutRef = useRef<number | null>(null);
 
   const deferredQuery = useDeferredValue(query);
@@ -108,6 +135,26 @@ export function PriceListSection() {
     return () => window.cancelAnimationFrame(frame);
   }, [focusCategory]);
 
+  useEffect(() => {
+    if (!selectedService) {
+      return;
+    }
+
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeServiceSheet();
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onEscape);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onEscape);
+    };
+  }, [closeServiceSheet, selectedService]);
+
   const visibleCategories = useMemo(() => {
     const selectedFilter = filterConfig.find((filter) => filter.key === activeFilter) ?? filterConfig[0];
 
@@ -129,6 +176,30 @@ export function PriceListSection() {
       .filter((category) => category.visibleItems.length > 0);
   }, [activeFilter, normalizedQuery]);
 
+  const mainCategoryOptions = useMemo(() => filterConfig.filter((filter) => filter.key !== "all"), []);
+
+  const selectedFilterConfig = useMemo(
+    () => filterConfig.find((filter) => filter.key === activeFilter) ?? filterConfig[0],
+    [activeFilter]
+  );
+
+  const relatedCategoryOptions = useMemo(() => {
+    const baseCategories = selectedFilterConfig.categoryIds
+      ? priceListCategories.filter((category) => selectedFilterConfig.categoryIds?.includes(category.id))
+      : priceListCategories;
+
+    const visibleCategoryCounts = new Map(
+      visibleCategories.map((category) => [category.id, category.visibleItems.length] as const)
+    );
+
+    return baseCategories
+      .map((category) => ({
+        ...category,
+        visibleCount: visibleCategoryCounts.get(category.id) ?? 0
+      }))
+      .filter((category) => (normalizedQuery ? category.visibleCount > 0 : true));
+  }, [normalizedQuery, selectedFilterConfig, visibleCategories]);
+
   const defaultExpandedCategoryIds = useMemo(
     () => visibleCategories.slice(0, 2).map((category) => category.id),
     [visibleCategories]
@@ -143,11 +214,113 @@ export function PriceListSection() {
     setExpandedCategoryIds((current) => (sameIds(current, nextExpandedIds) ? current : nextExpandedIds));
   }, [activeFilter, defaultExpandedCategoryIds, normalizedQuery, visibleCategories]);
 
+  useEffect(() => {
+    setSelectedJumpCategoryId((current) => {
+      if (!current) {
+        return "";
+      }
+
+      const isStillVisible = relatedCategoryOptions.some((category) => category.id === current);
+      return isStillVisible ? current : "";
+    });
+  }, [relatedCategoryOptions]);
+
   const toggleCategory = useCallback((categoryId: string) => {
     setExpandedCategoryIds((current) =>
       current.includes(categoryId) ? current.filter((id) => id !== categoryId) : [...current, categoryId]
     );
   }, []);
+
+  const togglePriceRows = useCallback((categoryId: string) => {
+    setExpandedPriceCategoryIds((current) =>
+      current.includes(categoryId) ? current.filter((id) => id !== categoryId) : [...current, categoryId]
+    );
+  }, []);
+
+  const selectMainCategory = useCallback((filterKey: FilterKey) => {
+    setActiveFilter((current) => (current === filterKey ? "all" : filterKey));
+    setSelectedJumpCategoryId("");
+  }, []);
+
+  const jumpToCategory = useCallback(
+    (categoryId: string) => {
+      setSelectedJumpCategoryId(categoryId);
+      focusCategory(categoryId);
+    },
+    [focusCategory]
+  );
+
+  const whatsappBaseHref = useMemo(() => {
+    try {
+      const parsed = new URL(siteConfig.bookingWhatsappHref);
+      const number = parsed.pathname.split("/").filter(Boolean)[0] ?? "23057718511";
+      return `https://wa.me/${number}`;
+    } catch {
+      return "https://wa.me/23057718511";
+    }
+  }, []);
+
+  const selectedServiceWhatsappHref = useMemo(() => {
+    if (!selectedService) {
+      return siteConfig.bookingWhatsappHref;
+    }
+
+    const message = `Hello Sim's Hair and Beauty, I would like to book ${selectedService.name} (${selectedService.price}). Could you please share availability?`;
+    return `${whatsappBaseHref}?text=${encodeURIComponent(message)}`;
+  }, [selectedService, whatsappBaseHref]);
+
+  const serviceSheet =
+    selectedService && typeof document !== "undefined"
+      ? createPortal(
+          <div className="fixed inset-0 z-[90]" role="dialog" aria-modal="true" aria-label="Service details">
+            <button
+              aria-label="Close service details"
+              className="absolute inset-0 bg-brand-noir/28"
+              onClick={closeServiceSheet}
+              type="button"
+            />
+            <div className="absolute inset-x-0 bottom-0 z-10 mx-auto w-full max-w-2xl rounded-t-[1.75rem] border border-brand-stone/80 bg-[linear-gradient(180deg,rgba(250,243,245,1),rgba(245,234,237,0.99))] p-5 shadow-[0_-16px_34px_rgba(87,59,55,0.18)] sm:bottom-4 sm:rounded-[1.75rem] sm:p-6">
+              <div className="mx-auto mb-4 h-1.5 w-16 rounded-full bg-brand-stone/65 sm:hidden" />
+              <div className="flex items-start justify-between gap-3">
+                <div className="space-y-1">
+                  <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-brand-red">
+                    {selectedService.categoryEyebrow}
+                  </p>
+                  <h3 className="text-pretty text-[1.32rem] font-semibold leading-7 text-brand-ink sm:text-[1.48rem]">
+                    {selectedService.name}
+                  </h3>
+                </div>
+                <button
+                  className={cn(
+                    "shrink-0 px-3 py-1 text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-brand-mist",
+                    controlPillClass
+                  )}
+                  onClick={closeServiceSheet}
+                  type="button"
+                >
+                  Close
+                </button>
+              </div>
+              <p className="mt-3 inline-flex rounded-full border border-brand-stone/74 bg-[#f8eff1] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-brand-noir">
+                {selectedService.price}
+              </p>
+              <p className="mt-4 text-sm leading-7 text-brand-mist">
+                {selectedService.categoryNote ??
+                  `${selectedService.categoryTitle} at Sim's Hair and Beauty. Message on WhatsApp to confirm availability and the right option for your hair or skin needs.`}
+              </p>
+              <div className="mt-5 grid gap-2.5 sm:grid-cols-2">
+                <Button href={selectedServiceWhatsappHref} onClick={closeServiceSheet} rel="noreferrer" target="_blank" variant="primary">
+                  Book this on WhatsApp
+                </Button>
+                <Button href={siteConfig.fixedLineHref} onClick={closeServiceSheet} variant="secondary">
+                  Call fixed line
+                </Button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )
+      : null;
 
   return (
     <section className="anchor-section py-12 sm:py-[4.75rem]" id="price-list">
@@ -205,13 +378,13 @@ export function PriceListSection() {
         <Reveal className="section-frame px-4 py-5 sm:px-7 sm:py-7">
           <div className="max-w-3xl space-y-3">
             <p className="text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-brand-red">
-              Browse by category
+              Price list
             </p>
             <h2 className="font-display text-[clamp(1.9rem,3.4vw,2.9rem)] leading-[1.02] tracking-[-0.03em] text-brand-ink">
-              Price List
+              Find a service
             </h2>
             <p className="text-sm leading-7 text-brand-mist">
-              Search by treatment name, then jump directly to the category you need.
+              Search by treatment name or choose a salon area below.
             </p>
           </div>
 
@@ -221,31 +394,110 @@ export function PriceListSection() {
               <input
                 className="w-full rounded-[1.35rem] border border-brand-stone/78 bg-[#f8eef1] px-4 py-3 text-sm text-brand-ink shadow-[0_10px_22px_rgba(87,59,55,0.04)] outline-none transition-all duration-300 ease-out placeholder:text-brand-mist/85 focus:border-brand-red/30 focus:bg-brand-cream focus:shadow-soft sm:rounded-2xl"
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search treatment"
+                placeholder="Search treatment..."
                 type="text"
                 value={query}
               />
             </label>
           </div>
 
-          <div className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 pb-2 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:pb-0">
-            {filterConfig.map((filter) => {
-              const isActive = activeFilter === filter.key;
-              return (
-                <button
-                  className={cn(
-                    "inline-flex shrink-0 items-center justify-center px-3.5 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.15em] transition-all duration-300 ease-out sm:px-4 sm:text-[0.73rem] sm:tracking-[0.16em]",
-                    controlFocusClass,
-                    isActive ? utilityActiveClass : `${controlPillClass} text-brand-mist`
-                  )}
-                  key={filter.key}
-                  onClick={() => setActiveFilter(filter.key)}
-                  type="button"
-                >
-                  {filter.label}
-                </button>
-              );
-            })}
+          <div className="mt-5 space-y-4">
+            <div>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-brand-red">
+                  Choose category
+                </p>
+                {activeFilter !== "all" ? (
+                  <button
+                    className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-brand-mist transition-colors hover:text-brand-red"
+                    onClick={() => selectMainCategory("all")}
+                    type="button"
+                  >
+                    Show all
+                  </button>
+                ) : null}
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-2.5 lg:grid-cols-4">
+                {mainCategoryOptions.map((filter) => {
+                  const isActive = activeFilter === filter.key;
+                  const count = filter.categoryIds?.reduce((total, id) => {
+                    const category = priceListCategories.find((item) => item.id === id);
+                    return total + (category?.items.length ?? 0);
+                  }, 0);
+
+                  return (
+                    <button
+                      className={cn(
+                        "group min-h-[5.4rem] rounded-[1.15rem] border px-3 py-3 text-left shadow-[0_10px_22px_rgba(87,59,55,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-red/24 hover:bg-[#f6e9ed] hover:shadow-soft active:translate-y-[1px]",
+                        controlFocusClass,
+                        isActive
+                          ? "border-brand-red/30 bg-[linear-gradient(180deg,rgba(247,233,237,0.98),rgba(239,214,221,0.96))] text-brand-noir"
+                          : "border-brand-stone/76 bg-[#f8eef1] text-brand-ink"
+                      )}
+                      key={filter.key}
+                      onClick={() => selectMainCategory(filter.key)}
+                      type="button"
+                    >
+                      <span className="block text-base font-semibold leading-6">{filter.label}</span>
+                      <span className="mt-1 block text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-brand-mist">
+                        {count} services
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-brand-red">
+                Popular shortcuts
+              </p>
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible">
+                {popularShortcuts.map((shortcut) => (
+                  <button
+                    className={cn(
+                      "inline-flex min-h-11 shrink-0 items-center justify-center px-4 text-[0.75rem] font-semibold tracking-[0.02em] text-brand-mist",
+                      controlPillClass
+                    )}
+                    key={shortcut.label}
+                    onClick={() => jumpToCategory(shortcut.categoryId)}
+                    type="button"
+                  >
+                    {shortcut.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {selectedFilterConfig.key !== "all" ? (
+              <div className="rounded-[1.15rem] border border-brand-stone/72 bg-[#f8eef1] p-3">
+                <p className="text-[0.66rem] font-semibold uppercase tracking-[0.2em] text-brand-red">
+                  {selectedFilterConfig.label} service type
+                </p>
+                <div className="mt-3 flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible">
+                  {relatedCategoryOptions.map((category) => {
+                    const isActive = selectedJumpCategoryId === category.id;
+
+                    return (
+                      <button
+                        className={cn(
+                          "inline-flex min-h-11 shrink-0 items-center justify-center gap-2 px-4 text-[0.75rem] font-semibold tracking-[0.02em]",
+                          isActive ? utilityActiveClass : `${controlPillClass} text-brand-mist`
+                        )}
+                        key={category.id}
+                        onClick={() => jumpToCategory(category.id)}
+                        type="button"
+                      >
+                        <span>{category.eyebrow}</span>
+                        <span className="rounded-full bg-brand-cream px-2 py-0.5 text-[0.62rem] uppercase tracking-[0.12em] text-brand-mist">
+                          {category.visibleCount}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           {normalizedQuery ? (
@@ -261,29 +513,6 @@ export function PriceListSection() {
             </div>
           ) : null}
         </Reveal>
-
-        <div className="-mx-1 mt-6 flex gap-2.5 overflow-x-auto px-1 pb-2 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:pb-0">
-          {visibleCategories.map((category) => (
-            <a
-              className={cn(
-                "group inline-flex shrink-0 cursor-pointer items-center gap-2 px-3.5 py-2 text-[0.69rem] font-semibold uppercase tracking-[0.15em] text-brand-mist sm:px-4 sm:text-[0.72rem] sm:tracking-[0.16em]",
-                controlPillClass
-              )}
-              href={`#${category.id}`}
-              key={category.id}
-              onClick={(event) => {
-                event.preventDefault();
-                focusCategory(category.id);
-                clearLinkFocus(event.currentTarget);
-              }}
-            >
-              <span>{category.eyebrow}</span>
-              <span className="rounded-full bg-brand-cream px-2 py-0.5 text-[0.62rem] tracking-[0.14em] text-brand-mist">
-                {category.visibleItems.length}
-              </span>
-            </a>
-          ))}
-        </div>
 
         {visibleCategories.length === 0 ? (
           <Reveal className="mt-8 section-frame px-5 py-8 text-center sm:px-7">
@@ -308,67 +537,111 @@ export function PriceListSection() {
             </div>
           </Reveal>
         ) : (
-          <div className="mt-8 grid gap-5 lg:grid-cols-2">
-            {visibleCategories.map((category, index) => (
-              <Reveal delayMs={(index % 4) * 60} key={category.id}>
-                <article
-                  className={`price-list-category-target section-frame anchor-section h-full p-5 sm:p-7 ${
-                    highlightedCategoryId === category.id ? "price-list-category-flash" : ""
-                  }`}
-                  id={category.id}
-                >
-                  <div className="flex items-start justify-between gap-3 border-b border-brand-stone/75 pb-4 sm:gap-4 sm:pb-5">
-                    <div className="space-y-2">
-                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-red">
-                        {category.eyebrow}
-                      </p>
-                      <h2 className="max-w-[18ch] text-balance font-display text-[1.6rem] leading-[1.04] tracking-[-0.03em] text-brand-ink sm:text-[1.9rem]">
-                        {category.title}
-                      </h2>
-                      {category.note ? (
-                        <p className="max-w-[34rem] text-sm leading-7 text-brand-mist">{category.note}</p>
-                      ) : null}
-                    </div>
-                    <div className="flex shrink-0 flex-col items-end gap-2">
-                      <div className="rounded-full border border-brand-stone/72 bg-[#f7edf0] px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-brand-mist sm:text-[0.7rem] sm:tracking-[0.16em]">
-                        {category.visibleItems.length} items
-                      </div>
-                      <button
-                        className={cn(
-                          "inline-flex items-center justify-center px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] lg:hidden",
-                          expandedCategoryIds.includes(category.id) ? utilityActiveClass : `${controlPillClass} text-brand-mist`
-                        )}
-                        onClick={() => toggleCategory(category.id)}
-                        type="button"
-                      >
-                        {expandedCategoryIds.includes(category.id) ? "Hide prices" : "Open prices"}
-                      </button>
-                    </div>
-                  </div>
+          <div className="mt-8 space-y-4 sm:space-y-5">
+            {visibleCategories.map((category, index) => {
+              const isCategoryOpen = expandedCategoryIds.includes(category.id);
+              const isShowingAllPrices = expandedPriceCategoryIds.includes(category.id);
+              const shouldLimitRows = !normalizedQuery && category.visibleItems.length > previewItemCount;
+              const displayedItems = shouldLimitRows && !isShowingAllPrices
+                ? category.visibleItems.slice(0, previewItemCount)
+                : category.visibleItems;
+              const hiddenItemCount = category.visibleItems.length - displayedItems.length;
 
-                  <div
-                    className={cn(
-                      "mt-5 space-y-2.5 lg:block",
-                      expandedCategoryIds.includes(category.id) ? "block" : "hidden"
-                    )}
+              return (
+                <Reveal delayMs={(index % 5) * 45} key={category.id}>
+                  <article
+                    className={`price-list-category-target section-frame anchor-section p-4 sm:p-5 ${
+                      highlightedCategoryId === category.id ? "price-list-category-flash" : ""
+                    }`}
+                    id={category.id}
                   >
-                    {category.visibleItems.map((item) => (
-                      <div
-                        className="group flex flex-col gap-1.5 rounded-[0.95rem] border border-transparent px-2.5 py-2 transition-all duration-200 hover:border-brand-stone/70 hover:bg-[#f5eaee] sm:flex-row sm:items-center sm:justify-between sm:gap-5 sm:rounded-xl"
-                        key={`${category.id}-${item.name}`}
-                      >
-                        <p className="pr-0 text-sm leading-6 text-brand-ink sm:pr-4 sm:leading-7">{item.name}</p>
-                        <p className="inline-flex shrink-0 rounded-full border border-brand-stone/72 bg-[#f7edf0] px-2.5 py-1 text-left text-xs font-semibold uppercase tracking-[0.12em] text-brand-noir sm:text-right">
-                          {item.price}
-                        </p>
+                    <button
+                      className={cn(
+                        "w-full rounded-2xl border border-brand-stone/70 bg-[linear-gradient(180deg,rgba(248,239,241,0.96),rgba(243,231,235,0.93))] px-4 py-3 text-left shadow-[0_10px_22px_rgba(87,59,55,0.04)] transition-all duration-300 hover:border-brand-red/24 hover:shadow-soft"
+                      )}
+                      onClick={() => toggleCategory(category.id)}
+                      type="button"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="space-y-1">
+                          <p className="text-[0.66rem] font-semibold uppercase tracking-[0.22em] text-brand-red">
+                            {category.eyebrow}
+                          </p>
+                          <h2 className="text-pretty text-[1.08rem] font-semibold leading-6 text-brand-ink sm:text-[1.18rem]">
+                            {category.title}
+                          </h2>
+                        </div>
+                        <div className="flex shrink-0 flex-col items-end gap-1.5">
+                          <span className="rounded-full border border-brand-stone/70 bg-[#f8eff1] px-2.5 py-1 text-[0.64rem] font-semibold uppercase tracking-[0.14em] text-brand-mist sm:text-[0.66rem]">
+                            {category.visibleItems.length} items
+                          </span>
+                          <span
+                            className={cn(
+                              "inline-flex items-center justify-center px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.14em]",
+                              isCategoryOpen ? utilityActiveClass : `${controlPillClass} text-brand-mist`
+                            )}
+                          >
+                            {isCategoryOpen ? "Hide" : "Open"}
+                          </span>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </article>
-              </Reveal>
-            ))}
+                      {category.note ? (
+                        <p className="mt-2 max-w-[48rem] text-sm leading-6 text-brand-mist">{category.note}</p>
+                      ) : null}
+                    </button>
+
+                    <div
+                      className={cn(
+                        "grid transition-all duration-300 ease-out",
+                        isCategoryOpen ? "mt-3 grid-rows-[1fr]" : "grid-rows-[0fr]"
+                      )}
+                    >
+                      <div className="overflow-hidden">
+                        <div className="space-y-2.5 border-t border-brand-stone/70 pt-3">
+                          {displayedItems.map((item) => (
+                            <button
+                              className="group flex w-full flex-col items-start gap-2 rounded-[0.95rem] border border-transparent bg-[#f8eef1] px-3 py-2.5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-red/22 hover:bg-[#f6e9ed] hover:shadow-[0_8px_16px_rgba(87,59,55,0.08)] sm:flex-row sm:items-center sm:justify-between sm:rounded-xl"
+                              key={`${category.id}-${item.name}`}
+                              onClick={() =>
+                                setSelectedService({
+                                  categoryEyebrow: category.eyebrow,
+                                  categoryTitle: category.title,
+                                  categoryNote: category.note,
+                                  name: item.name,
+                                  price: item.price
+                                })
+                              }
+                              type="button"
+                            >
+                              <p className="pr-0 text-sm leading-6 text-brand-ink sm:pr-4 sm:leading-7">{item.name}</p>
+                              <p className="inline-flex shrink-0 self-start rounded-full border border-brand-stone/72 bg-[#f7edf0] px-2.5 py-1 text-left text-xs font-semibold uppercase tracking-[0.12em] text-brand-noir sm:self-auto sm:text-right">
+                                {item.price}
+                              </p>
+                            </button>
+                          ))}
+                          {shouldLimitRows ? (
+                            <button
+                              className={cn(
+                                "mt-1 inline-flex min-h-11 w-full items-center justify-center px-4 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-brand-mist sm:w-auto",
+                                controlPillClass
+                              )}
+                              onClick={() => togglePriceRows(category.id)}
+                              type="button"
+                            >
+                              {isShowingAllPrices ? "Show less" : `View all prices (${hiddenItemCount} more)`}
+                            </button>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </Reveal>
+              );
+            })}
           </div>
         )}
+
+        {serviceSheet}
       </Container>
     </section>
   );

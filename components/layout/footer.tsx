@@ -1,15 +1,16 @@
 import Link from "next/link";
 
-import { openingHours, siteConfig } from "@/content/site";
+import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/ui/container";
+import { openingHours, siteConfig } from "@/content/site";
 
 export function Footer() {
   return (
-    <footer className="border-t border-line bg-blush/50">
-      <Container className="grid gap-8 py-10 text-[0.95rem] leading-relaxed text-muted sm:grid-cols-3">
+    <footer className="pink-wash">
+      <Container className="grid gap-8 pb-8 pt-12 text-[0.95rem] leading-relaxed text-plum sm:grid-cols-[1.1fr_1fr_1fr]">
         <div>
-          <p className="font-display text-xl text-ink">{siteConfig.name}</p>
-          <p className="mt-2">
+          <Logo className="w-[9rem]" />
+          <p className="mt-4">
             {siteConfig.address.street}, {siteConfig.address.locality}
             <br />
             {siteConfig.address.country} {siteConfig.address.postalCode}
@@ -33,7 +34,7 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="font-semibold text-ink">Follow</p>
+          <p className="font-semibold text-ink">More</p>
           <ul className="mt-2 space-y-1">
             {siteConfig.socials.map((s) => (
               <li key={s.label}>
@@ -50,7 +51,7 @@ export function Footer() {
           </ul>
         </div>
       </Container>
-      <Container className="border-t border-line py-5 text-sm text-muted">
+      <Container className="border-t border-[#e9b9c6] py-5 text-sm text-plum">
         © {new Date().getFullYear()} {siteConfig.name}
       </Container>
     </footer>

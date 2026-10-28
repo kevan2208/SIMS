@@ -74,10 +74,10 @@ export function OpenStatus({ className }: { className?: string }) {
         aria-hidden="true"
         className={cn(
           "inline-block h-2 w-2 rounded-full",
-          status === null ? "bg-line" : status.open ? "bg-[#2f7d4f]" : "bg-muted/60"
+          status === null ? "bg-seam" : status.open ? "bg-[#2f7d4f]" : "bg-mauve/50"
         )}
       />
-      <span className={status?.open ? "text-[#25633f]" : "text-muted"}>
+      <span className={status?.open ? "text-[#2c6a45]" : "text-mauve"}>
         {status ? status.text : openingHours.summary}
       </span>
     </p>

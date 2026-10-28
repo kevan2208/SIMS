@@ -64,6 +64,8 @@ export const priceListCategories: PriceListCategory[] = [
     eyebrow: "Hair treatments",
     title: "Repair, smoothing, scalp care, and head massage.",
     items: [
+      // Shown at Rs 2000 on the old homepage but missing from the 2025 PDF. Confirm with Simi.
+      { name: "Absolut Repair Molecular", price: "Rs 2000" },
       { name: "Organic protein Keratine", price: "From Rs 6000" },
       { name: "Lissage Brazilian Extenso", price: "From Rs 7000" },
       { name: "Protein de Soi (L'Oreal)", price: "From Rs 8000" },
@@ -194,30 +196,21 @@ function pick(picks: PreviewPick[]) {
   });
 }
 
-/** A short taste of the menu for the homepage. Prices come straight from the full list above. */
-export const homeMenuPreview = [
+/** Homepage price card tabs. Prices come straight from the full list above. */
+export const homePriceTabs = [
   {
-    title: "Hair",
+    label: "Hair",
     href: "/services#hair-care",
     items: pick([
       { category: "hair-care", name: "Shampoo + Blowdry" },
       { category: "hair-care", name: "Shampoo + Haircut + Blowdry" },
+      { category: "hair-care", name: "Men's haircut" },
       { category: "hair-colour", name: "Inoa roots + Blowdry" },
       { category: "hair-treatments", name: "Metal Detox treatment" }
     ])
   },
   {
-    title: "Face and body",
-    href: "/services#facial-body-care",
-    items: pick([
-      { category: "facial-body-care", name: "Hydrating", label: "Hydrating facial" },
-      { category: "facial-body-care", name: "Anti Ageing", label: "Anti-ageing facial" },
-      { category: "threading", name: "Eyebrow shaping", label: "Eyebrow threading" },
-      { category: "body-massage", name: "Relaxing full body massage (60 mins)", label: "Full body massage, 60 mins" }
-    ])
-  },
-  {
-    title: "Hands and feet",
+    label: "Nails",
     href: "/services#hand-foot-care",
     items: pick([
       { category: "hand-foot-care", name: "Manicure" },
@@ -225,5 +218,57 @@ export const homeMenuPreview = [
       { category: "hand-foot-care", name: "Gel nail polish" },
       { category: "hand-foot-care", name: "Jelly pedicure" }
     ])
+  },
+  {
+    label: "Face",
+    href: "/services#facial-body-care",
+    items: pick([
+      { category: "facial-body-care", name: "Hydrating", label: "Hydrating facial" },
+      { category: "facial-body-care", name: "Anti Ageing", label: "Anti-ageing facial" },
+      { category: "facial-body-care", name: "Acne", label: "Acne facial" },
+      { category: "threading", name: "Eyebrow shaping", label: "Eyebrow threading" }
+    ])
+  },
+  {
+    label: "Waxing",
+    href: "/services#waxing",
+    items: pick([
+      { category: "waxing", name: "Underarms" },
+      { category: "waxing", name: "1/2 leg" },
+      { category: "waxing", name: "Full leg" },
+      { category: "waxing", name: "Full arm" }
+    ])
   }
 ];
+
+/**
+ * "Not sure what to book?" pairings.
+ * TO CHECK WITH SIMI: these are first drafts. The pairings are professional advice, so she should confirm
+ * each one before this goes live.
+ */
+export const treatmentGuide = [
+  {
+    concern: "Dry, rough, or breaking",
+    ...pickOne({ category: "hair-treatments", name: "Absolut Repair Molecular" })
+  },
+  {
+    concern: "Colour looks dull or brassy",
+    ...pickOne({ category: "hair-treatments", name: "Metal Detox treatment", label: "Metal Detox" })
+  },
+  {
+    concern: "Frizzy and hard to style",
+    ...pickOne({ category: "hair-treatments", name: "Lissage Brazilian Extenso", label: "Brazilian smoothing" })
+  },
+  {
+    concern: "Itchy, flaky, or greasy scalp",
+    ...pickOne({ category: "hair-treatments", name: "Dandruff and greasy hair treatment", label: "Scalp treatment" })
+  },
+  {
+    concern: "Skin looks tired or dull",
+    ...pickOne({ category: "facial-body-care", name: "Hydrating", label: "Hydrating facial" })
+  }
+];
+
+function pickOne(p: PreviewPick) {
+  return { treatment: pick([p])[0].name, price: pick([p])[0].price, href: `/services#${p.category}` };
+}

@@ -48,29 +48,12 @@ export const openingHours = {
   summary: "Monday to Saturday, 08:30 to 17:30. Closed Sunday."
 };
 
-export const signatureTreatment = {
-  title: "Absolut Repair Molecular",
-  price: "Rs 2000",
-  body:
-    "Our signature repair service, using L'Oréal Professionnel's Absolut Repair Molecular protocol with a peptide bonder and amino acids. It rebuilds strength in hair that's been coloured, bleached, or heat styled, and leaves the lengths soft and moving without weighing them down.",
-  suitedTo: [
-    "Lengths that feel rough, dry, or straw-like",
-    "Coloured, bleached, or often heat-styled hair",
-    "Anyone wanting softer hair that still moves naturally"
-  ],
-  image: "/products/absolut-repair-molecular-treatment.jpg",
-  imageAlt: "L'Oréal Professionnel Absolut Repair Molecular treatment"
-};
-
 /**
  * Photos for the homepage gallery. The section stays hidden until at least one photo is added.
  * Put files in /public/gallery and list them here, for example:
  * { src: "/gallery/salon-chairs.jpg", alt: "The styling chairs at Sim's" }
  */
 export const galleryPhotos: Array<{ src: string; alt: string }> = [];
-
-/** Main homepage photo. Until one is set, the hero shows the logo artwork instead. */
-export const heroPhoto: { src: string; alt: string } | null = null;
 
 export const faqs: Array<{ question: string; answer: string }> = [
   {

@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --paper: #fbf3ee;
-  --ink: #21161a;
+  --ink: #1a1416;
   --red: #af2830;
+  --blush: #fdf3f5;
 }
 
 html {
-  background: var(--paper);
+  background: var(--blush);
   color: var(--ink);
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -19,7 +19,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--paper);
+  background: #fff;
   font-family: var(--font-body);
   font-kerning: normal;
   overflow-x: hidden;
@@ -38,14 +38,52 @@ summary {
 :focus-visible {
   outline: 2px solid var(--red);
   outline-offset: 3px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 [id] {
-  scroll-margin-top: 5.5rem;
+  scroll-margin-top: 5rem;
 }
 
-/* Price menu rows: name, dotted leader, price — the way the salon's printed board reads. */
+/* The salon's pink, kept from the original site and deepened a little. */
+.pink-wash {
+  background:
+    radial-gradient(120% 70% at 88% 6%, rgba(175, 40, 48, 0.15), transparent 60%),
+    radial-gradient(90% 60% at 0% 100%, rgba(233, 170, 190, 0.5), transparent 70%),
+    linear-gradient(175deg, #fff6f8 0%, #fbe3e9 50%, #f5ccd7 100%);
+}
+
+.pink-fade {
+  background: linear-gradient(180deg, #fff 0%, #fdeef2 100%);
+}
+
+/*
+ * Appointment-card shapes: real cut-outs (not painted circles), so the notches
+ * show whatever is behind the card, gradient included.
+ */
+.ticket {
+  --notch: 9px;
+  --stub: 5.5rem;
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 98%, #000) top / 100% 51% no-repeat,
+    radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 0, #0000 98%, #000) top / 100% 51% no-repeat,
+    radial-gradient(circle var(--notch) at calc(100% - var(--stub)) 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+}
+
+.price-card {
+  --notch: 9px;
+  --seam: 3.75rem;
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 var(--seam), #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% var(--seam), #0000 98%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 var(--seam), #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% var(--seam), #0000 98%, #000) right / 51% 100% no-repeat;
+}
+
+/* Price rows: name, dotted leader, price, like the printed menu. */
 .menu-row {
   display: flex;
   align-items: baseline;
@@ -56,7 +94,7 @@ summary {
 .menu-row__leader {
   flex: 1 1 1.5rem;
   min-width: 1.5rem;
-  border-bottom: 1.5px dotted #c9aea3;
+  border-bottom: 1.5px dotted #dfa3b3;
   transform: translateY(-0.3em);
 }
 
@@ -65,7 +103,6 @@ summary {
   white-space: nowrap;
 }
 
-/* FAQ disclosure marker */
 .faq summary {
   list-style: none;
   cursor: pointer;
@@ -76,14 +113,13 @@ summary {
 }
 
 .faq summary .faq__mark {
-  transition: transform 200ms ease;
+  transition: transform 220ms ease;
 }
 
 .faq[open] summary .faq__mark {
   transform: rotate(45deg);
 }
 
-/* Horizontal category jump list on the price page */
 .no-scrollbar {
   scrollbar-width: none;
 }

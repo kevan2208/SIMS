@@ -9,13 +9,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Taken from the salon's printed menu (peach paper) and the logo (script red, hair black).
-        paper: "#fbf3ee",
-        sheet: "#fffaf7",
-        blush: "#f3e2d9",
-        line: "#e6d3c9",
-        ink: "#21161a",
-        muted: "#6b585c",
+        // The logo: script red, hair black. The pink carries over from the original site.
+        ink: "#1a1416",
+        plum: "#6e4651",
+        mauve: "#8f6a74",
+        petal: "#fbe3e9",
+        rose: "#f5ccd7",
+        blush: "#fdf3f5",
+        seam: "#f1dde2",
+        dash: "#e6b9c5",
         sims: {
           red: "#af2830",
           deep: "#8c1f27"

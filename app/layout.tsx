@@ -37,17 +37,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image"
-  },
-  icons: {
-    icon: "/logo-sims.png",
-    apple: "/logo-sims.png"
   }
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#fbf3ee",
+  themeColor: "#fbe3e9",
   colorScheme: "light"
 };
 
@@ -60,7 +56,7 @@ const structuredData = [
     description: siteConfig.description,
     url: siteUrl,
     image: `${siteUrl}/opengraph-image`,
-    logo: `${siteUrl}/logo-sims.png`,
+    logo: `${siteUrl}/logo-sims.svg`,
     telephone: siteConfig.fixedLineDisplay.replace(/\s/g, ""),
     priceRange: "Rs 75 to Rs 8000",
     currenciesAccepted: "MUR",

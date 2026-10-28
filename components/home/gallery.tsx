@@ -29,7 +29,7 @@ export function Gallery() {
           ))}
         </div>
         {instagram ? (
-          <p className="mt-6 text-[0.98rem] text-muted">
+          <p className="mt-6 text-[0.98rem] text-mauve">
             More of our work on{" "}
             <a className="text-sims-red underline underline-offset-4" href={instagram.href} rel="noreferrer" target="_blank">
               Instagram

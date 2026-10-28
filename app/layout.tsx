@@ -1,14 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Prata } from "next/font/google";
-import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
 import "./globals.css";
 
-import { Analytics } from "@vercel/analytics/next";
 import { Footer } from "@/components/layout/footer";
-import { PageLoadOverlay } from "@/components/ui/page-load-overlay";
 import { Navbar } from "@/components/layout/navbar";
-import { siteConfig } from "@/content/site";
+import { faqs, openingHours, siteConfig, siteUrl } from "@/content/site";
 
 const displayFont = Prata({
   subsets: ["latin"],
@@ -19,178 +17,104 @@ const displayFont = Prata({
 
 const bodyFont = Manrope({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   variable: "--font-body",
   display: "swap"
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://simshairandbeauty.com"),
-  title: `${siteConfig.name} | Hair, Facials & Nails in ${siteConfig.location}`,
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: `${siteConfig.name} | Hair, Facials and Nails in Flacq, Mauritius`,
+    template: `%s | ${siteConfig.name}`
+  },
   description: siteConfig.description,
-  alternates: {
-    canonical: "/"
-  },
-  keywords: [
-    "hair salon mauritius",
-    "beauty salon mauritius",
-    "facials mauritius",
-    "gel nails mauritius",
-    "hair treatment mauritius",
-    "salon flacq",
-    "hair repair treatment",
-    "molecular treatment",
-    "book salon whatsapp"
-  ].join(", "),
-  authors: [{ name: "Sim's Hair and Beauty" }],
-  creator: "Sim's Hair and Beauty",
-  publisher: "Sim's Hair and Beauty",
-  formatDetection: {
-    email: false,
-    telephone: false
-  },
   openGraph: {
     type: "website",
     locale: "en_MU",
-    url: "https://simshairandbeauty.com",
     siteName: siteConfig.name,
-    title: `${siteConfig.name} | Hair, Facials & Nails`,
-    description: siteConfig.description,
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name
-      }
-    ]
+    description: siteConfig.description
   },
   twitter: {
-    card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description,
-    creator: "@simshairbeauty",
-    images: ["/twitter-image"]
+    card: "summary_large_image"
   },
   icons: {
-    icon: "/logo-sims-hair-beauty.png",
-    shortcut: "/logo-sims-hair-beauty.png",
-    apple: "/logo-sims-hair-beauty.png"
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true
-    }
+    icon: "/logo-sims.png",
+    apple: "/logo-sims.png"
   }
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
+  themeColor: "#fbf3ee",
   colorScheme: "light"
 };
 
-export default function RootLayout({
-  children
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const structuredData = {
+const structuredData = [
+  {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "BeautySalon",
+    "@id": `${siteUrl}/#salon`,
     name: siteConfig.name,
     description: siteConfig.description,
+    url: siteUrl,
+    image: `${siteUrl}/opengraph-image`,
+    logo: `${siteUrl}/logo-sims.png`,
+    telephone: siteConfig.fixedLineDisplay.replace(/\s/g, ""),
+    priceRange: "Rs 75 to Rs 8000",
+    currenciesAccepted: "MUR",
+    paymentAccepted: siteConfig.paymentMethods.join(", "),
     address: {
       "@type": "PostalAddress",
-      streetAddress: siteConfig.addressLines[0].split(",")[0],
-      addressLocality: "Flacq",
-      addressRegion: siteConfig.location,
-      postalCode: "40606",
+      streetAddress: siteConfig.address.street,
+      addressLocality: siteConfig.address.locality,
+      postalCode: siteConfig.address.postalCode,
       addressCountry: "MU"
     },
-    telephone: siteConfig.fixedLineDisplay.replace(/\s/g, ""),
-    image: "/opengraph-image",
-    url: "https://simshairandbeauty.com",
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: siteConfig.geo.latitude,
+      longitude: siteConfig.geo.longitude
+    },
+    hasMap: siteConfig.directionsHref,
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        opens: "08:30",
-        closes: "17:30"
+        opens: openingHours.opens,
+        closes: openingHours.closes
       }
     ],
-    sameAs: siteConfig.socials.map((social) => social.href)
-  };
+    sameAs: siteConfig.socials.map((s) => s.href)
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer }
+    }))
+  }
+];
 
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <head>
-        <Script
+    <html className={`${displayFont.variable} ${bodyFont.variable}`} lang="en">
+      <body>
+        <script
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-          id="schema-organization"
           type="application/ld+json"
         />
-      </head>
-      <body className={`${displayFont.variable} ${bodyFont.variable}`}>
-        <Script id="tailwind-runtime-config" strategy="beforeInteractive">
-          {`
-            tailwind.config = {
-              theme: {
-                extend: {
-                  colors: {
-                    brand: {
-                      ink: "#231217",
-                      red: "#8b2639",
-                      cream: "#f4e8ea",
-                      stone: "#ceb7bc",
-                      mist: "#6d565d",
-                      petal: "#e8c8cf",
-                      blush: "#ddb3bc",
-                      shell: "#f7edef",
-                      rose: "#efd8dd",
-                      noir: "#2c171d",
-                      berry: "#a4475c"
-                    }
-                  },
-                  fontFamily: {
-                    display: ["var(--font-display)", "Bodoni 72", "Baskerville", "Palatino Linotype", "serif"],
-                    body: ["var(--font-body)", "Segoe UI", "Helvetica Neue", "Arial", "sans-serif"]
-                  },
-                  boxShadow: {
-                    soft: "0 16px 40px rgba(87, 59, 55, 0.08), 0 6px 16px rgba(87, 59, 55, 0.04)",
-                    lift: "0 24px 54px rgba(87, 59, 55, 0.14), 0 10px 26px rgba(87, 59, 55, 0.08)"
-                  },
-                  keyframes: {
-                    fadeUp: {
-                      "0%": { opacity: "0", transform: "translate3d(0, 18px, 0)" },
-                      "100%": { opacity: "1", transform: "translate3d(0, 0, 0)" }
-                    },
-                    drift: {
-                      "0%, 100%": { transform: "translate3d(0, 0, 0)" },
-                      "50%": { transform: "translate3d(0, -12px, 0)" }
-                    }
-                  },
-                  animation: {
-                    fadeUp: "fadeUp 720ms ease-out both",
-                    drift: "drift 12s ease-in-out infinite"
-                  }
-                }
-              }
-            };
-          `}
-        </Script>
-        <Script
-          src="https://cdn.tailwindcss.com"
-          strategy="beforeInteractive"
-        />
-        <PageLoadOverlay />
+        <a
+          className="sr-only z-50 rounded-md bg-ink px-4 py-2 text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+          href="#main"
+        >
+          Skip to content
+        </a>
         <Navbar />
-        {children}
+        <div id="main">{children}</div>
         <Footer />
         <Analytics />
       </body>

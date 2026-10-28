@@ -1,67 +1,57 @@
-import { siteConfig } from "@/content/site";
+import Link from "next/link";
 
-import { ActionIcon } from "@/components/ui/action-icon";
+import { openingHours, siteConfig } from "@/content/site";
 import { Container } from "@/components/ui/container";
-import { controlPillClass } from "@/components/ui/control-styles";
-import { SocialLink } from "@/components/ui/social-link";
-import { cn } from "@/lib/utils";
 
 export function Footer() {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer className="border-t border-brand-stone/80 pb-6 pt-5 sm:pb-7">
-      <Container>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-[auto_auto] lg:items-start lg:justify-between">
-          <div className="space-y-2.5">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-red">Book</p>
-            <div className="space-y-2.5 text-sm leading-6 text-brand-mist">
-              <a
-                className={cn("group inline-flex items-center gap-2 px-4 py-2 text-brand-ink", controlPillClass)}
-                href={siteConfig.bookingWhatsappHref}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <span aria-hidden="true" className="inline-flex items-center justify-center text-brand-red">
-                  <ActionIcon name="whatsapp" />
-                </span>
-                <span>WhatsApp salon: {siteConfig.bookingWhatsappDisplay}</span>
-              </a>
-              <div className="flex flex-col gap-1.5 pl-1">
-                <a
-                  className="inline-flex w-fit items-center gap-2 text-brand-ink transition-colors duration-300 hover:text-brand-red"
-                  href={siteConfig.fixedLineHref}
-                >
-                  <span aria-hidden="true" className="inline-flex items-center justify-center text-brand-red">
-                    <ActionIcon name="phone" />
-                  </span>
-                  <span>Call fixed line: {siteConfig.fixedLineDisplay}</span>
+    <footer className="border-t border-line bg-blush/50">
+      <Container className="grid gap-8 py-10 text-[0.95rem] leading-relaxed text-muted sm:grid-cols-3">
+        <div>
+          <p className="font-display text-xl text-ink">{siteConfig.name}</p>
+          <p className="mt-2">
+            {siteConfig.address.street}, {siteConfig.address.locality}
+            <br />
+            {siteConfig.address.country} {siteConfig.address.postalCode}
+          </p>
+        </div>
+
+        <div>
+          <p className="font-semibold text-ink">Contact</p>
+          <p className="mt-2">
+            WhatsApp{" "}
+            <a className="text-ink underline-offset-4 hover:underline" href={siteConfig.bookingWhatsappHref} rel="noreferrer" target="_blank">
+              {siteConfig.bookingWhatsappDisplay}
+            </a>
+            <br />
+            Salon{" "}
+            <a className="text-ink underline-offset-4 hover:underline" href={siteConfig.fixedLineHref}>
+              {siteConfig.fixedLineDisplay}
+            </a>
+          </p>
+          <p className="mt-2">{openingHours.summary}</p>
+        </div>
+
+        <div>
+          <p className="font-semibold text-ink">Follow</p>
+          <ul className="mt-2 space-y-1">
+            {siteConfig.socials.map((s) => (
+              <li key={s.label}>
+                <a className="text-ink underline-offset-4 hover:underline" href={s.href} rel="noreferrer" target="_blank">
+                  {s.label}
                 </a>
-                <div className="flex items-center gap-2 text-brand-mist">
-                  <span aria-hidden="true" className="inline-flex items-center justify-center text-brand-red">
-                    <ActionIcon name="map" />
-                  </span>
-                  <span>Flacq Retail Park, Mauritius</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {siteConfig.socials.length > 0 ? (
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-red">Social</p>
-              <div className="flex flex-col gap-1.5">
-                {siteConfig.socials.map((social) => (
-                  <SocialLink href={social.href} key={social.label} label={social.label} />
-                ))}
-              </div>
-            </div>
-          ) : null}
+              </li>
+            ))}
+            <li>
+              <Link className="text-ink underline-offset-4 hover:underline" href="/services">
+                Full price list
+              </Link>
+            </li>
+          </ul>
         </div>
-
-        <div className="mt-5 border-t border-brand-stone/80 pt-3 text-sm text-brand-mist">
-          <p>&copy; {currentYear} {siteConfig.name}. All rights reserved.</p>
-        </div>
+      </Container>
+      <Container className="border-t border-line py-5 text-sm text-muted">
+        © {new Date().getFullYear()} {siteConfig.name}
       </Container>
     </footer>
   );

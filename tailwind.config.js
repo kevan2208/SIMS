@@ -9,56 +9,24 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: {
-          ink: "#151213",
-          red: "#a82f32",
-          cream: "#fcf8f3",
-          stone: "#ece5de",
-          mist: "#6f6664",
-          petal: "#f6ece8",
-          blush: "#eddcd7",
-          shell: "#fffaf6",
-          rose: "#f3e4df"
+        // Taken from the salon's printed menu (peach paper) and the logo (script red, hair black).
+        paper: "#fbf3ee",
+        sheet: "#fffaf7",
+        blush: "#f3e2d9",
+        line: "#e6d3c9",
+        ink: "#21161a",
+        muted: "#6b585c",
+        sims: {
+          red: "#af2830",
+          deep: "#8c1f27"
         }
       },
       fontFamily: {
-        display: ["var(--font-display)", "Georgia", "Cambria", "Times New Roman", "serif"],
-        body: [
-          "var(--font-body)",
-          "Avenir Next",
-          "Segoe UI",
-          "Helvetica Neue",
-          "Arial",
-          "sans-serif"
-        ]
+        display: ["var(--font-display)", "Georgia", "serif"],
+        body: ["var(--font-body)", "Segoe UI", "Helvetica Neue", "Arial", "sans-serif"]
       },
-      boxShadow: {
-        soft: "0 18px 46px rgba(123, 94, 90, 0.09), 0 6px 18px rgba(123, 94, 90, 0.05)",
-        lift: "0 26px 60px rgba(123, 94, 90, 0.12), 0 8px 24px rgba(123, 94, 90, 0.08)"
-      },
-      keyframes: {
-        fadeUp: {
-          "0%": {
-            opacity: "0",
-            transform: "translate3d(0, 18px, 0)"
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translate3d(0, 0, 0)"
-          }
-        },
-        drift: {
-          "0%, 100%": {
-            transform: "translate3d(0, 0, 0)"
-          },
-          "50%": {
-            transform: "translate3d(0, -12px, 0)"
-          }
-        }
-      },
-      animation: {
-        fadeUp: "fadeUp 720ms ease-out both",
-        drift: "drift 12s ease-in-out infinite"
+      maxWidth: {
+        page: "72rem"
       }
     }
   },

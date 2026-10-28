@@ -1,7 +1,8 @@
+import { siteUrl } from "@/content/site";
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://simshairandbeauty.com";
+  const baseUrl = siteUrl;
 
   return [
     {

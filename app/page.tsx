@@ -1,14 +1,26 @@
-import { LandingPageTrialSection } from "@/components/sections/landing-page-trial-section";
-import { ServicesSection } from "@/components/sections/services-section";
-import { CTASection } from "@/components/ui/cta-section";
-import { finalCtas } from "@/content/site";
+import type { Metadata } from "next";
+
+import { Faq } from "@/components/home/faq";
+import { Gallery } from "@/components/home/gallery";
+import { Hero } from "@/components/home/hero";
+import { MenuPreview } from "@/components/home/menu-preview";
+import { Signature } from "@/components/home/signature";
+import { Visit } from "@/components/home/visit";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: { url: "/" }
+};
 
 export default function Home() {
   return (
     <main>
-      <LandingPageTrialSection />
-      <ServicesSection mode="home" />
-      <CTASection content={finalCtas.landing} variant="compact" />
+      <Hero />
+      <Signature />
+      <MenuPreview />
+      <Gallery />
+      <Faq />
+      <Visit />
     </main>
   );
 }

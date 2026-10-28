@@ -20,6 +20,11 @@ const nextConfig = {
         permanent: false
       },
       {
+        source: "/sims-price-list-2025-original.pdf",
+        destination: "/sims-price-list.pdf",
+        permanent: true
+      },
+      {
         source: "/price-list",
         destination: "/services#price-list",
         permanent: false

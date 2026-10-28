@@ -11,40 +11,6 @@ export type PriceListCategory = {
   items: PriceListItem[];
 };
 
-export type PriceListHighlight = {
-  title: string;
-  price: string;
-  note: string;
-  href: string;
-};
-
-export const priceListHighlights: PriceListHighlight[] = [
-  {
-    title: "Absolute Repair Molecular Treatment",
-    price: "Rs 2000",
-    note: "A popular choice when hair feels weakened, dry, or overworked.",
-    href: "#hair-treatments"
-  },
-  {
-    title: "Metal Detox Treatment + Blowdry",
-    price: "Rs 1000",
-    note: "Booked for a cleaner feel, smoother finish, and fresh shine.",
-    href: "#hair-treatments"
-  },
-  {
-    title: "Gel Manicure / Pedicure",
-    price: "Rs 2500",
-    note: "A regular favourite for neat, longer-lasting nail finishing.",
-    href: "#hand-foot-care"
-  },
-  {
-    title: "Gold Facial",
-    price: "Rs 1200",
-    note: "Chosen when skin needs brightness, softness, and a fresh glow.",
-    href: "#facial-body-care"
-  }
-];
-
 export const priceListCategories: PriceListCategory[] = [
   {
     id: "hair-care",
@@ -181,7 +147,7 @@ export const priceListCategories: PriceListCategory[] = [
       { name: "Makeup", price: "Rs 1300" },
       { name: "Hairstyling + Makeup", price: "Rs 2500" },
       { name: "Bridal hair + Makeup", price: "Rs 8000" },
-      { name: "Saree drapping", price: "Rs 300" },
+      { name: "Saree draping", price: "Rs 300" },
       { name: "Fake lashes", price: "Rs 200" }
     ]
   },
@@ -215,5 +181,49 @@ export const priceListCategories: PriceListCategory[] = [
       { name: "Reflexology (30 mins)", price: "Rs 700" },
       { name: "Head and shoulder massage (30 mins)", price: "Rs 700" }
     ]
+  }
+];
+
+type PreviewPick = { category: string; name: string; label?: string };
+
+function pick(picks: PreviewPick[]) {
+  return picks.map(({ category, name, label }) => {
+    const item = priceListCategories.find((c) => c.id === category)?.items.find((i) => i.name === name);
+    if (!item) throw new Error(`Price list preview: "${name}" not found in "${category}"`);
+    return { name: label ?? item.name, price: item.price, href: `/services#${category}` };
+  });
+}
+
+/** A short taste of the menu for the homepage. Prices come straight from the full list above. */
+export const homeMenuPreview = [
+  {
+    title: "Hair",
+    href: "/services#hair-care",
+    items: pick([
+      { category: "hair-care", name: "Shampoo + Blowdry" },
+      { category: "hair-care", name: "Shampoo + Haircut + Blowdry" },
+      { category: "hair-colour", name: "Inoa roots + Blowdry" },
+      { category: "hair-treatments", name: "Metal Detox treatment" }
+    ])
+  },
+  {
+    title: "Face and body",
+    href: "/services#facial-body-care",
+    items: pick([
+      { category: "facial-body-care", name: "Hydrating", label: "Hydrating facial" },
+      { category: "facial-body-care", name: "Anti Ageing", label: "Anti-ageing facial" },
+      { category: "threading", name: "Eyebrow shaping", label: "Eyebrow threading" },
+      { category: "body-massage", name: "Relaxing full body massage (60 mins)", label: "Full body massage, 60 mins" }
+    ])
+  },
+  {
+    title: "Hands and feet",
+    href: "/services#hand-foot-care",
+    items: pick([
+      { category: "hand-foot-care", name: "Manicure" },
+      { category: "hand-foot-care", name: "Pedicure" },
+      { category: "hand-foot-care", name: "Gel nail polish" },
+      { category: "hand-foot-care", name: "Jelly pedicure" }
+    ])
   }
 ];

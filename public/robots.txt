@@ -2,4 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /.next/
 Disallow: /api/
+Disallow: /share
+Disallow: /stats
 Sitemap: https://simshairandbeauty.com/sitemap.xml

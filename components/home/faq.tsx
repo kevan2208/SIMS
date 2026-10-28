@@ -1,16 +1,16 @@
 import { Container } from "@/components/ui/container";
-import { faqs } from "@/content/site";
+import { strings, type Lang } from "@/content/strings";
 
-export function Faq() {
+export function Faq({ lang }: { lang: Lang }) {
+  const t = strings[lang];
   return (
     <section aria-labelledby="faq-title" className="pink-fade-down py-14 sm:py-20">
       <Container className="grid gap-8 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
         <h2 className="font-display text-[1.9rem] leading-tight text-ink sm:text-[2.4rem] md:sticky md:top-24 md:self-start" id="faq-title">
-          Before you come in
+          {t.faqTitle}
         </h2>
-
         <div className="border-t border-seam">
-          {faqs.map((item) => (
+          {t.faqs.map((item) => (
             <details className="faq border-b border-seam" key={item.question}>
               <summary className="flex items-center justify-between gap-6 py-4 text-[1.02rem] font-semibold text-ink">
                 {item.question}

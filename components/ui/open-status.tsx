@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 
 import { openingHours } from "@/content/site";
+import type { Strings } from "@/content/strings";
+import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-type Status = { open: boolean; text: string };
-
-const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+export type Status = { open: boolean; text: string };
 
 function toMinutes(hhmm: string) {
   const [h, m] = hhmm.split(":").map(Number);
@@ -28,58 +28,56 @@ function mauritiusNow(date: Date) {
   return { day, minutes: Number(get("hour")) * 60 + Number(get("minute")) };
 }
 
-export function getStatus(date: Date): Status {
+export function getStatus(date: Date, t: Strings): Status {
   const { day, minutes } = mauritiusNow(date);
   const opens = toMinutes(openingHours.opens);
   const closes = toMinutes(openingHours.closes);
   const openToday = openingHours.days.includes(day);
 
   if (openToday && minutes >= opens && minutes < closes) {
-    const left = closes - minutes;
     return {
       open: true,
-      text: left <= 60 ? `Open now, closing soon at ${openingHours.closes}` : `Open now until ${openingHours.closes}`
+      text: closes - minutes <= 60 ? t.status.closingSoon(openingHours.closes) : t.status.openUntil(openingHours.closes)
     };
   }
-
-  if (openToday && minutes < opens) {
-    return { open: false, text: `Closed now, opens today at ${openingHours.opens}` };
-  }
+  if (openToday && minutes < opens) return { open: false, text: t.status.opensToday(openingHours.opens) };
 
   for (let step = 1; step <= 7; step++) {
     const next = (day + step) % 7;
     if (openingHours.days.includes(next)) {
-      const when = step === 1 ? "tomorrow" : dayNames[next];
-      return { open: false, text: `Closed now, opens ${when} at ${openingHours.opens}` };
+      return {
+        open: false,
+        text: step === 1 ? t.status.opensTomorrow(openingHours.opens) : t.status.opensOn(t.status.days[next], openingHours.opens)
+      };
     }
   }
-
-  return { open: false, text: "Closed" };
+  return { open: false, text: t.status.closed };
 }
 
-export function OpenStatus({ className }: { className?: string }) {
-  // Rendered on the server without a status, so the page never shows a stale time from build day.
+export function useOpenStatus() {
+  const { t } = useLang();
+  // Worked out in the browser, so the page never shows a stale time from when it was built.
   const [status, setStatus] = useState<Status | null>(null);
-
   useEffect(() => {
-    const update = () => setStatus(getStatus(new Date()));
+    const update = () => setStatus(getStatus(new Date(), t));
     update();
     const id = window.setInterval(update, 60_000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [t]);
+  return status;
+}
+
+export function OpenStatus({ className }: { className?: string }) {
+  const { t } = useLang();
+  const status = useOpenStatus();
 
   return (
     <p aria-live="polite" className={cn("flex min-h-6 items-center gap-2 text-[0.95rem]", className)}>
       <span
         aria-hidden="true"
-        className={cn(
-          "inline-block h-2 w-2 rounded-full",
-          status === null ? "bg-seam" : status.open ? "bg-[#2f7d4f]" : "bg-mauve/50"
-        )}
+        className={cn("inline-block h-2 w-2 rounded-full", status === null ? "bg-seam" : status.open ? "bg-[#2f7d4f]" : "bg-mauve/50")}
       />
-      <span className={status?.open ? "text-[#2c6a45]" : "text-mauve"}>
-        {status ? status.text : openingHours.summary}
-      </span>
+      <span className={status?.open ? "text-[#2c6a45]" : "text-mauve"}>{status ? status.text : t.hoursSummary}</span>
     </p>
   );
 }

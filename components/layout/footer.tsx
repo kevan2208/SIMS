@@ -1,10 +1,15 @@
+"use client";
+
 import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/ui/container";
-import { openingHours, siteConfig } from "@/content/site";
+import { siteConfig, whatsappLink } from "@/content/site";
+import { localePath } from "@/content/strings";
+import { useLang } from "@/lib/i18n";
 
 export function Footer() {
+  const { lang, t } = useLang();
   return (
     <footer className="pink-wash--from-blush">
       <Container className="grid gap-8 pb-8 pt-12 text-[0.95rem] leading-relaxed text-plum sm:grid-cols-[1.1fr_1fr_1fr]">
@@ -18,23 +23,23 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="font-semibold text-ink">Contact</p>
+          <p className="font-semibold text-ink">{t.footer.contact}</p>
           <p className="mt-2">
             WhatsApp{" "}
-            <a className="text-ink underline-offset-4 hover:underline" href={siteConfig.bookingWhatsappHref} rel="noreferrer" target="_blank">
+            <a className="text-ink underline-offset-4 hover:underline" href={whatsappLink(t.message.general)} rel="noreferrer" target="_blank">
               {siteConfig.bookingWhatsappDisplay}
             </a>
             <br />
-            Salon{" "}
+            {t.footer.salon}{" "}
             <a className="text-ink underline-offset-4 hover:underline" href={siteConfig.fixedLineHref}>
               {siteConfig.fixedLineDisplay}
             </a>
           </p>
-          <p className="mt-2">{openingHours.summary}</p>
+          <p className="mt-2">{t.hoursSummary}</p>
         </div>
 
         <div>
-          <p className="font-semibold text-ink">More</p>
+          <p className="font-semibold text-ink">{t.footer.more}</p>
           <ul className="mt-2 space-y-1">
             {siteConfig.socials.map((s) => (
               <li key={s.label}>
@@ -44,8 +49,8 @@ export function Footer() {
               </li>
             ))}
             <li>
-              <Link className="text-ink underline-offset-4 hover:underline" href="/services">
-                Full price list
+              <Link className="text-ink underline-offset-4 hover:underline" href={localePath(lang, "/services")}>
+                {t.footer.fullList}
               </Link>
             </li>
           </ul>

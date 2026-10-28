@@ -2,6 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  experimental: {
+    serverComponentsExternalPackages: ["@react-pdf/renderer"],
+    // The PDF menu reads these fonts at runtime.
+    outputFileTracingIncludes: {
+      "/menu.pdf": ["./assets/fonts/**"],
+      "/fr/menu.pdf": ["./assets/fonts/**"],
+      "/share/[...slug]": ["./assets/fonts/**", "./public/logo-sims.svg"]
+    }
+  },
   async redirects() {
     return [
       {
@@ -21,7 +30,12 @@ const nextConfig = {
       },
       {
         source: "/sims-price-list-2025-original.pdf",
-        destination: "/sims-price-list.pdf",
+        destination: "/menu.pdf",
+        permanent: true
+      },
+      {
+        source: "/sims-price-list.pdf",
+        destination: "/menu.pdf",
         permanent: true
       },
       {

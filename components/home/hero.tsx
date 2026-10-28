@@ -17,7 +17,7 @@ export function Hero() {
         <div className="intro-rise flex w-full flex-col items-center">
           <p className="mt-5 text-[1.02rem] text-plum sm:text-lg">Hair, facials and nails at Flacq Retail Park</p>
           <OpenStatus className="mt-1.5 justify-center" />
-          <BookingTicket className="mt-7 w-full max-w-[27rem] text-left" />
+          <BookingTicket className="mt-7 w-full max-w-[27rem] text-left" id="hero-booking" />
         </div>
       </Container>
     </section>

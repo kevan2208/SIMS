@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
  * The main booking control, shaped like a salon appointment card:
  * WhatsApp on the card, a call option on the tear-off stub.
  */
-export function BookingTicket({ className }: { className?: string }) {
+export function BookingTicket({ className, id }: { className?: string; id?: string }) {
   return (
-    <div className={cn("ticket grid grid-cols-[1fr_5.5rem] rounded-md bg-white text-ink", className)}>
+    <div className={cn("ticket grid grid-cols-[1fr_5.5rem] rounded-md bg-white text-ink", className)} id={id}>
       <a
         className="group block py-4 pl-5 pr-3 transition-colors hover:bg-[#fff8fa]"
         href={siteConfig.bookingWhatsappHref}

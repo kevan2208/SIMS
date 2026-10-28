@@ -4,9 +4,11 @@ import { Analytics } from "@vercel/analytics/next";
 
 import "./globals.css";
 
+import { BookingDock } from "@/components/layout/booking-dock";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { faqs, openingHours, siteConfig, siteUrl } from "@/content/site";
+import { BookingProvider } from "@/lib/booking";
 
 const displayFont = Prata({
   subsets: ["latin"],
@@ -115,9 +117,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         >
           Skip to content
         </a>
-        <Navbar />
-        <div id="main">{children}</div>
-        <Footer />
+        <BookingProvider>
+          <Navbar />
+          <div id="main">{children}</div>
+          <Footer />
+          <BookingDock />
+        </BookingProvider>
         <Analytics />
       </body>
     </html>

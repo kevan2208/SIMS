@@ -15,7 +15,7 @@ export function Prices() {
             Prices
           </h2>
           <p className="mt-3 max-w-[26rem] text-[1rem] leading-relaxed text-mauve">
-            Some of our most booked services. Hair prices depend on length and styling time.
+            Some of our most booked services. Tap any to add it to your booking.
           </p>
           <div className="mt-4 hidden flex-col items-start md:flex">
             <TextLink href="/services">See all {serviceCount} services</TextLink>

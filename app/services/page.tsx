@@ -33,6 +33,9 @@ export default function ServicesPage() {
         <TextLink className="mt-2" download href={siteConfig.priceListPdfHref}>
           Download the PDF ({siteConfig.priceListPdfSize})
         </TextLink>
+        <p className="mx-auto mt-6 max-w-[30rem] text-[0.92rem] text-mauve">
+          Tap the services you&apos;d like, then send them to us on WhatsApp in one message.
+        </p>
       </Container>
 
       <nav aria-label="Menu sections" className="sticky top-16 z-30 border-y border-[#efc3cf] bg-[#fdeef2]/90 backdrop-blur">

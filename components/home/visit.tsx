@@ -40,21 +40,32 @@ export function Visit() {
 
           <div className="mt-5 flex flex-col items-start">
             <TextLink external href={siteConfig.directionsHref}>
-              Get directions in Google Maps
-            </TextLink>
-            <TextLink external href={siteConfig.directionsHref}>
               Read our Google reviews
             </TextLink>
           </div>
         </div>
 
-        <iframe
-          className="h-[20rem] w-full rounded-md border-0 bg-petal md:h-full md:min-h-[24rem]"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          src={siteConfig.mapEmbedSrc}
-          title="Map showing Sim's Hair and Beauty at Flacq Retail Park"
-        />
+        <figure className="flex flex-col">
+          {/* The address sits behind the map, so it still reads if the map is slow or blocked. */}
+          <div className="relative flex-1 overflow-hidden rounded-md bg-petal">
+            <p className="absolute inset-0 flex items-center justify-center p-6 text-center text-[0.95rem] text-plum">
+              {siteConfig.address.street}, {siteConfig.address.locality}
+            </p>
+            <iframe
+              className="relative h-[20rem] w-full border-0 md:h-full md:min-h-[24rem]"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              src={siteConfig.mapEmbedSrc}
+              title="Map showing Sim's Hair and Beauty at Flacq Retail Park"
+            />
+          </div>
+          <figcaption className="mt-2 text-[0.88rem] text-mauve">
+            Inside {siteConfig.address.street}.{" "}
+            <a className="font-semibold text-sims-red underline underline-offset-4" href={siteConfig.directionsHref} rel="noreferrer" target="_blank">
+              Open in Google Maps
+            </a>
+          </figcaption>
+        </figure>
       </Container>
     </section>
   );

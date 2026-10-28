@@ -6,7 +6,7 @@ import { openingHours, siteConfig } from "@/content/site";
 
 export function Footer() {
   return (
-    <footer className="pink-wash">
+    <footer className="pink-wash--from-blush">
       <Container className="grid gap-8 pb-8 pt-12 text-[0.95rem] leading-relaxed text-plum sm:grid-cols-[1.1fr_1fr_1fr]">
         <div>
           <Logo className="w-[9rem]" />

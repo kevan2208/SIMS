@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Frangipani } from "@/components/brand/logo";
 import { BookingTicket } from "@/components/ui/booking-ticket";
 import { Container } from "@/components/ui/container";
+import { JumpNav } from "@/components/ui/jump-nav";
 import { MenuRow } from "@/components/ui/menu-row";
 import { TextLink } from "@/components/ui/text-link";
 import { priceListCategories } from "@/content/price-list";
@@ -35,22 +36,14 @@ export default function ServicesPage() {
       </Container>
 
       <nav aria-label="Menu sections" className="sticky top-16 z-30 border-y border-[#efc3cf] bg-[#fdeef2]/90 backdrop-blur">
-        <Container className="no-scrollbar flex gap-1 overflow-x-auto py-2">
-          {priceListCategories.map((c) => (
-            <a
-              className="shrink-0 rounded-full px-3 py-1.5 text-[0.88rem] font-medium text-plum hover:bg-white hover:text-ink"
-              href={`#${c.id}`}
-              key={c.id}
-            >
-              {c.eyebrow}
-            </a>
-          ))}
+        <Container>
+          <JumpNav items={priceListCategories.map((c) => ({ id: c.id, label: c.eyebrow }))} />
         </Container>
       </nav>
 
       <Container className="grid max-w-[60rem] gap-x-16 gap-y-12 pb-16 pt-12 md:grid-cols-2">
         {priceListCategories.map((c) => (
-          <section aria-labelledby={`${c.id}-title`} id={c.id} key={c.id}>
+          <section aria-labelledby={`${c.id}-title`} className="scroll-mt-32" id={c.id} key={c.id}>
             <h2 className="text-center font-display text-[1.5rem] text-ink" id={`${c.id}-title`}>
               {c.eyebrow}
             </h2>

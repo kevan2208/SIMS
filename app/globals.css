@@ -41,7 +41,7 @@ summary {
   border-radius: 4px;
 }
 
-[id] {
+:where([id]) {
   scroll-margin-top: 5rem;
 }
 
@@ -53,8 +53,18 @@ summary {
     linear-gradient(175deg, #fff6f8 0%, #fbe3e9 50%, #f5ccd7 100%);
 }
 
+.pink-wash--from-blush {
+  background:
+    radial-gradient(120% 70% at 88% 100%, rgba(175, 40, 48, 0.12), transparent 60%),
+    linear-gradient(180deg, #fdeef2 0%, #fbe3e9 45%, #f5ccd7 100%);
+}
+
 .pink-fade {
   background: linear-gradient(180deg, #fff 0%, #fdeef2 100%);
+}
+
+.pink-fade-down {
+  background: linear-gradient(180deg, #fdeef2 0%, #fff 100%);
 }
 
 /*
@@ -87,6 +97,8 @@ summary {
 .menu-row {
   display: flex;
   align-items: baseline;
+  /* Long names wrap; the leader and price line up with the last line, not the first. */
+  align-items: last baseline;
   gap: 0.6rem;
   padding: 0.55rem 0;
 }
@@ -138,5 +150,95 @@ summary {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+}
+
+/*
+ * Homepage arrival: the hair sweeps in, "Sim's" settles, the frangipani blooms, then the booking card rises.
+ * About 1.4s, never blocks the page, plays once per visit (see the intro script in layout.tsx),
+ * and is skipped entirely when the visitor has asked for reduced motion.
+ */
+.logo-intro__hair {
+  animation: intro-sweep 1000ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.logo-intro__script {
+  animation: intro-settle 800ms cubic-bezier(0.22, 1, 0.36, 1) 350ms both;
+}
+
+.logo-intro__flower {
+  transform-box: view-box;
+  transform-origin: 89.25% 24.4%;
+  animation: intro-bloom 700ms cubic-bezier(0.34, 1.4, 0.64, 1) 850ms both;
+}
+
+.logo-intro__tag {
+  animation: intro-fade 600ms ease-out 1000ms both;
+}
+
+.intro-rise {
+  animation: intro-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) 1100ms both;
+}
+
+@keyframes intro-sweep {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes intro-settle {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intro-bloom {
+  from {
+    opacity: 0;
+    transform: scale(0.2) rotate(-70deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+html[data-intro="seen"] .logo-intro *,
+html[data-intro="seen"] .intro-rise {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-intro *,
+  .intro-rise {
+    animation: none !important;
   }
 }

@@ -95,9 +95,15 @@ const structuredData = [
   }
 ];
 
+const introScript = `try{if(sessionStorage.getItem("sims-intro")){document.documentElement.dataset.intro="seen"}else{sessionStorage.setItem("sims-intro","1")}}catch(e){}`;
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html className={`${displayFont.variable} ${bodyFont.variable}`} lang="en">
+    <html className={`${displayFont.variable} ${bodyFont.variable}`} lang="en" suppressHydrationWarning>
+      <head>
+        {/* The homepage intro plays once per visit; after that, pages open straight away. */}
+        <script dangerouslySetInnerHTML={{ __html: introScript }} />
+      </head>
       <body>
         <script
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

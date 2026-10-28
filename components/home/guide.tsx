@@ -8,7 +8,7 @@ export function Guide() {
   return (
     <section aria-labelledby="guide-title" className="bg-white py-14 sm:py-20">
       <Container className="grid gap-8 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
-        <div>
+        <div className="md:sticky md:top-24 md:self-start">
           <h2 className="font-display text-[1.9rem] leading-tight text-ink sm:text-[2.4rem]" id="guide-title">
             Not sure what to book?
           </h2>

@@ -3,9 +3,9 @@ import { faqs } from "@/content/site";
 
 export function Faq() {
   return (
-    <section aria-labelledby="faq-title" className="bg-white py-14 sm:py-20">
+    <section aria-labelledby="faq-title" className="pink-fade-down py-14 sm:py-20">
       <Container className="grid gap-8 md:grid-cols-[0.85fr_1.15fr] md:gap-14">
-        <h2 className="font-display text-[1.9rem] leading-tight text-ink sm:text-[2.4rem]" id="faq-title">
+        <h2 className="font-display text-[1.9rem] leading-tight text-ink sm:text-[2.4rem] md:sticky md:top-24 md:self-start" id="faq-title">
           Before you come in
         </h2>
 

@@ -284,6 +284,30 @@ html[data-intro="seen"] .intro-rise {
   }
 }
 
+/* Booking card: blush body, dusty-rose WhatsApp stub, and a soft lifted shadow.
+   The shadow sits on the wrapper because the ticket's notch mask would clip a box-shadow. */
+.dock-lift {
+  filter: drop-shadow(0 8px 18px rgba(142, 72, 88, 0.26));
+}
+
+.dock-card {
+  background: linear-gradient(100deg, #ffffff 0%, #fde6ec 100%);
+}
+
+.dock-stub {
+  background: linear-gradient(160deg, #a65a6c, #8e4858);
+  transition: filter 0.2s;
+}
+
+.dock-stub:hover {
+  filter: brightness(0.92);
+}
+
+.dock-stub:focus-visible {
+  outline: 2px solid #1a1416;
+  outline-offset: -4px;
+}
+
 .dock-hop {
   animation: dock-hop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

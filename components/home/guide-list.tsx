@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 
 import { Frangipani } from "@/components/brand/logo";
 import { useBooking } from "@/lib/booking";

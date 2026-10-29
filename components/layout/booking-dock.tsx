@@ -70,9 +70,9 @@ export function BookingDock() {
         )}
       >
         {picked ? (
-          <div className={hop ? "dock-hop" : undefined} key={hop}>
+          <div className={cn("dock-lift", hop > 0 && "dock-hop")} key={hop}>
             <div
-              className="ticket grid grid-cols-[1fr_7rem] rounded-md bg-white text-ink shadow-[0_10px_30px_rgba(110,70,81,0.2)]"
+              className="dock-card ticket grid grid-cols-[1fr_7rem] rounded-md text-ink"
               style={{ ["--stub" as string]: "7rem" }}
             >
               <div className="min-w-0 py-3 pl-4 pr-3">
@@ -87,7 +87,7 @@ export function BookingDock() {
                 <p className="mt-0.5 truncate font-display text-[1.1rem] leading-snug">{items.map((i) => i.name).join(", ")}</p>
               </div>
               <a
-                className="flex flex-col items-center justify-center gap-1 border-l-[1.5px] border-dashed border-dash px-2 text-center text-[0.85rem] font-semibold leading-tight text-sims-red hover:bg-[#fff8fa]"
+                className="dock-stub flex flex-col items-center justify-center gap-1 px-2 text-center text-[0.85rem] font-semibold leading-tight text-white"
                 href={href}
                 onClick={() => trackTap("book-list", items.map((i) => i.id).join("|"))}
                 rel="noreferrer"

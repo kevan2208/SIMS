@@ -33,8 +33,8 @@ const en = {
   prices: {
     title: "Prices",
     body: "Some of our most booked services. Tap any to add it to your booking.",
-    seeAll: (n: number) => `See all ${n} services`,
-    download: (size: string) => `Download the price list (PDF, ${size})`,
+    seeAll: "View the full menu",
+    download: "Download the price list (PDF)",
     categories: "Price categories"
   },
   menu: {
@@ -43,7 +43,7 @@ const en = {
     metaDescription:
       "Full price list for Sim's Hair and Beauty in Flacq, Mauritius: haircuts, colour, keratin and repair treatments, facials, waxing, threading, nails, massage, and wedding hair and makeup.",
     intro: "All prices in rupees. Hair prices depend on length and styling time, so we'll confirm yours when you book.",
-    download: (size: string) => `Download the PDF (${size})`,
+    download: "Download the PDF",
     tapHint: "Tap the services you'd like, then send them to us on WhatsApp in one message.",
     sections: "Menu sections",
     ready: "Ready to book?"
@@ -146,8 +146,8 @@ const fr: Strings = {
   prices: {
     title: "Tarifs",
     body: "Quelques-unes de nos prestations les plus demandées. Touchez-en une pour l'ajouter à votre réservation.",
-    seeAll: (n) => `Voir les ${n} prestations`,
-    download: (size) => `Télécharger la carte des tarifs (PDF, ${size})`,
+    seeAll: "Voir la carte complète",
+    download: "Télécharger la carte des tarifs (PDF)",
     categories: "Catégories de tarifs"
   },
   menu: {
@@ -156,7 +156,7 @@ const fr: Strings = {
     metaDescription:
       "Tous les tarifs de Sim's Hair and Beauty à Flacq, Maurice : coupes, coloration, kératine et soins réparateurs, soins du visage, épilation, ongles, massages, coiffure et maquillage de mariée.",
     intro: "Tous les prix sont en roupies. Les prix coiffure varient selon la longueur et le temps de coiffage ; nous confirmerons le vôtre à la réservation.",
-    download: (size) => `Télécharger le PDF (${size})`,
+    download: "Télécharger le PDF",
     tapHint: "Touchez les prestations qui vous intéressent, puis envoyez-les-nous sur WhatsApp en un seul message.",
     sections: "Sections de la carte",
     ready: "Envie de réserver ?"

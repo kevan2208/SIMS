@@ -47,7 +47,7 @@ function LogoMark({ width }: { width: number }) {
     <Svg height={(width * 747) / 1000} viewBox="0 0 1000 747" width={width}>
       <Path d={logoPaths.hair} fill={INK} fillRule="evenodd" />
       <Path d={logoPaths.script} fill={RED} fillRule="evenodd" />
-      <Path d={logoPaths.tag} fill="#55494c" fillRule="evenodd" />
+      <Path d={logoPaths.tag} fill="#403a3c" fillRule="evenodd" />
     </Svg>
   );
 }

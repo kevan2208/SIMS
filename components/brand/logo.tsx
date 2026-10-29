@@ -22,7 +22,7 @@ export function Logo({ className, compact = false, intro = false, title = "Sim's
       <svg aria-label={title} className={cn("block h-auto", className)} role="img" viewBox={viewBox} xmlns="http://www.w3.org/2000/svg">
         <path d={logoPaths.hair} fill="#1a1416" fillRule="evenodd" />
         <path d={logoPaths.script} fill="#af2830" fillRule="evenodd" />
-        {compact ? null : <path d={logoPaths.tag} fill="#55494c" fillRule="evenodd" />}
+        {compact ? null : <path d={logoPaths.tag} fill="#403a3c" fillRule="evenodd" />}
       </svg>
     );
   }
@@ -45,7 +45,7 @@ export function Logo({ className, compact = false, intro = false, title = "Sim's
       <g clipPath="url(#intro-flower-area)">
         <path className="logo-intro__flower" d={logoPaths.script} fill="#af2830" fillRule="evenodd" />
       </g>
-      {compact ? null : <path className="logo-intro__tag" d={logoPaths.tag} fill="#55494c" fillRule="evenodd" />}
+      {compact ? null : <path className="logo-intro__tag" d={logoPaths.tag} fill="#403a3c" fillRule="evenodd" />}
     </svg>
   );
 }

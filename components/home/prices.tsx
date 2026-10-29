@@ -5,13 +5,13 @@ import { siteConfig } from "@/content/site";
 import { localePath, strings, type Lang } from "@/content/strings";
 import type { HomeTab } from "@/lib/content";
 
-export function Prices({ lang, serviceCount, tabs }: { lang: Lang; serviceCount: number; tabs: HomeTab[] }) {
+export function Prices({ lang, tabs }: { lang: Lang; tabs: HomeTab[] }) {
   const t = strings[lang];
   const links = (
     <>
-      <TextLink href={localePath(lang, "/services")}>{t.prices.seeAll(serviceCount)}</TextLink>
+      <TextLink href={localePath(lang, "/services")}>{t.prices.seeAll}</TextLink>
       <TextLink download href={localePath(lang, siteConfig.priceListPdfPath)}>
-        {t.prices.download("PDF")}
+        {t.prices.download}
       </TextLink>
     </>
   );

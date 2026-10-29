@@ -38,7 +38,7 @@ export async function ServicesPage({ lang }: { lang: Lang }) {
         </div>
         <p className="mx-auto mt-4 max-w-[30rem] text-[1rem] leading-relaxed text-plum">{t.menu.intro}</p>
         <TextLink className="mt-2" download href={localePath(lang, siteConfig.priceListPdfPath)}>
-          {t.menu.download("PDF")}
+          {t.menu.download}
         </TextLink>
         <p className="mx-auto mt-6 max-w-[30rem] text-[0.92rem] text-mauve">{t.menu.tapHint}</p>
       </Container>

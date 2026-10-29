@@ -24,7 +24,7 @@ export async function HomePage({ lang }: { lang: Lang }) {
       <Hero lang={lang} />
       {content.promo ? <PromoCard lang={lang} promo={content.promo} /> : null}
       <Guide guide={content.guide} lang={lang} />
-      <Prices lang={lang} serviceCount={content.serviceCount} tabs={content.homeTabs} />
+      <Prices lang={lang} tabs={content.homeTabs} />
       <Gallery lang={lang} />
       <Faq lang={lang} />
       <Visit lang={lang} />

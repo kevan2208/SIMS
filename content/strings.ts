@@ -28,7 +28,7 @@ const en = {
   promo: { label: "This month", until: (d: string) => `Until ${d}`, book: "Book this offer", viewPoster: "View the poster" },
   guide: {
     title: "Not sure what to book?",
-    body: "Start with how your hair or skin feels. We'll confirm the right treatment when you message us."
+    body: "Pick what sounds like you, and we'll recommend the right treatment when you message us."
   },
   prices: {
     title: "Prices",
@@ -141,7 +141,7 @@ const fr: Strings = {
   promo: { label: "Ce mois-ci", until: (d) => `Jusqu'au ${d}`, book: "Réserver cette offre", viewPoster: "Voir l'affiche" },
   guide: {
     title: "Vous hésitez ?",
-    body: "Dites-nous comment sont vos cheveux ou votre peau. Nous confirmerons le bon soin quand vous nous écrirez."
+    body: "Choisissez ce qui vous ressemble, et nous vous conseillerons le bon soin quand vous nous écrirez."
   },
   prices: {
     title: "Tarifs",

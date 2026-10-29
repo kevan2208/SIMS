@@ -323,3 +323,51 @@ html[data-intro="seen"] .intro-rise {
     transform: translateY(0);
   }
 }
+
+/* The opened booking list: the same ticket, torn along a dashed line with a notch on each side. */
+.sheet-top {
+  --notch: 10px;
+  background: linear-gradient(170deg, #ffffff 0%, #fff6f8 100%);
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 100%, #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 100%, #0000 98%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 100%, #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 100%, #0000 98%, #000) right / 51% 100% no-repeat;
+}
+
+.sheet-bottom {
+  --notch: 10px;
+  background: linear-gradient(170deg, #fff6f8 0%, #fde6ec 100%);
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 0, #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 0, #0000 98%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 0, #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 0, #0000 98%, #000) right / 51% 100% no-repeat;
+}
+
+.sheet-in {
+  animation: sheet-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.sheet-veil {
+  animation: veil-in 0.25s ease-out both;
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes veil-in {
+  from {
+    opacity: 0;
+  }
+}

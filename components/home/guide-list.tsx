@@ -13,7 +13,7 @@ type Row = {
   treatment: string;
   price: string;
   href: string;
-  service: { id: string; name: string; bookingName: string; price: string };
+  service: { id: string; name: string; bookingName: string; price: string; category: string };
 };
 
 /** Treatment guide rows. Each one can go straight into the booking list; the flower turns when it's added. */
@@ -57,7 +57,9 @@ function GuideRow({ row }: { row: Row }) {
             toggle({
               id: row.service.id,
               name: row.service.bookingName,
-              price: row.service.price
+              price: row.service.price,
+              label: row.service.name,
+              category: row.service.category
             });
           }}
           type="button"

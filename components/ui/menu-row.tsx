@@ -12,6 +12,7 @@ type RowService = {
   name: string;
   bookingName: string;
   price: string;
+  category?: string;
 };
 
 /** A price row that can be added to the booking list. The whole row is the tap target. */
@@ -37,7 +38,9 @@ export function MenuRow({ service }: { service: RowService }) {
           toggle({
             id: service.id,
             name: service.bookingName,
-            price: service.price
+            price: service.price,
+            label: service.name,
+            category: service.category
           });
         }}
         type="button"

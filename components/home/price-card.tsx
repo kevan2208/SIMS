@@ -6,7 +6,7 @@ import { MenuRow } from "@/components/ui/menu-row";
 import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-type Tab = { label: string; href: string; items: Array<{ id: string; name: string; bookingName: string; price: string }> };
+type Tab = { label: string; href: string; items: Array<{ id: string; name: string; bookingName: string; price: string; category: string }> };
 
 /** A small tabbed price card. Keyboard: arrow keys move between tabs. */
 export function PriceCard({ tabs }: { tabs: Tab[] }) {

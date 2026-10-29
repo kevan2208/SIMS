@@ -1,12 +1,13 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ActionIcon } from "@/components/ui/action-icon";
 import { useOpenStatus } from "@/components/ui/open-status";
 import { TrackedLink } from "@/components/ui/tracked-link";
 import { openingHours, whatsappLink } from "@/content/site";
+import { BookingSheet } from "@/components/layout/booking-sheet";
 import { bookingTotal, useBooking } from "@/lib/booking";
 import { useLang } from "@/lib/i18n";
 import { trackTap } from "@/lib/track";
@@ -55,6 +56,36 @@ export function BookingDock() {
 
   const picked = items.length > 0;
   const total = bookingTotal(items);
+
+  // The full list ("See all & edit"). Opening adds a history entry so the phone's Back button closes it.
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const seeAllRef = useRef<HTMLButtonElement>(null);
+  const openSheet = () => {
+    try {
+      window.history.pushState({ simsSheet: true }, "");
+    } catch {}
+    setSheetOpen(true);
+  };
+  const closeSheet = useCallback(() => {
+    if (window.history.state?.simsSheet) window.history.back();
+    else setSheetOpen(false);
+  }, []);
+  useEffect(() => {
+    if (!sheetOpen) return;
+    const onPop = () => setSheetOpen(false);
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [sheetOpen]);
+  // Removing the last service closes the list.
+  useEffect(() => {
+    if (sheetOpen && !picked) closeSheet();
+  }, [sheetOpen, picked, closeSheet]);
+  // Give focus back to "See all & edit" when the list closes.
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    if (wasOpen.current && !sheetOpen) seeAllRef.current?.focus();
+    wasOpen.current = sheetOpen;
+  }, [sheetOpen]);
   const showBar = !picked && scrolled && !heroCardVisible;
 
   return (
@@ -75,16 +106,41 @@ export function BookingDock() {
               className="dock-card ticket grid grid-cols-[1fr_7rem] rounded-md text-ink"
               style={{ ["--stub" as string]: "7rem" }}
             >
-              <div className="min-w-0 py-3 pl-4 pr-3">
+              {/* Tapping anywhere on this side opens the full list; Clear still works on its own. */}
+              <div className="min-w-0 cursor-pointer py-3 pl-4 pr-3" onClick={openSheet}>
                 <p className="flex items-center justify-between gap-3 text-[0.78rem] text-mauve">
                   <span>
-                    {t.dock.count(items.length)}, {total !== null ? t.dock.total(total) : t.dock.confirm}
+                    {t.dock.count(items.length)}
+                    {total ? `, ${total}` : ""}
                   </span>
-                  <button className="font-semibold text-plum underline underline-offset-2 hover:text-ink" onClick={clear} type="button">
+                  <button
+                    className="font-semibold text-plum underline underline-offset-2 hover:text-ink"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      clear();
+                    }}
+                    type="button"
+                  >
                     {t.dock.clear}
                   </button>
                 </p>
-                <p className="mt-0.5 truncate font-display text-[1.1rem] leading-snug">{items.map((i) => i.name).join(", ")}</p>
+                <p className="mt-0.5 truncate font-display text-[1.1rem] leading-snug">{items.map((i) => i.label ?? i.name).join(", ")}</p>
+                <button
+                  aria-expanded={sheetOpen}
+                  aria-haspopup="dialog"
+                  className="mt-0.5 inline-flex items-center gap-1 text-[0.78rem] font-semibold text-[#a65a6c] hover:text-[#8e4858]"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openSheet();
+                  }}
+                  ref={seeAllRef}
+                  type="button"
+                >
+                  {t.dock.seeAll}
+                  <svg aria-hidden="true" fill="none" height="10" viewBox="0 0 10 10" width="10">
+                    <path d="M2 6.5 5 3.5l3 3" stroke="currentColor" strokeLinecap="round" strokeWidth="1.6" />
+                  </svg>
+                </button>
               </div>
               <a
                 className="dock-stub flex flex-col items-center justify-center gap-1 px-2 text-center text-[0.85rem] font-semibold leading-tight text-white"
@@ -100,6 +156,8 @@ export function BookingDock() {
           </div>
         ) : null}
       </div>
+
+      {sheetOpen && picked ? <BookingSheet onClose={closeSheet} total={total} /> : null}
 
       <TrackedLink
         aria-hidden={!showBar}

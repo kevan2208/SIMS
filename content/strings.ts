@@ -44,7 +44,7 @@ const en = {
     metaTitle: "Prices and services",
     metaDescription:
       "Full price list for Sim's Hair and Beauty in Flacq, Mauritius: haircuts, colour, keratin and repair treatments, facials, waxing, threading, nails, massage, and wedding hair and makeup.",
-    intro: "All prices in rupees. Hair prices depend on length and styling time, so we'll confirm yours when you book.",
+    intro: "All prices in rupees. Where there's a range, the final price depends on hair length and time.",
     download: "Download the PDF",
     tapHint: "Tap the services you'd like, then send them to us on WhatsApp in one message.",
     sections: "Menu sections",
@@ -56,16 +56,22 @@ const en = {
   },
   dock: {
     count: (n: number) => `${n} ${n === 1 ? "service" : "services"}`,
-    total: (n: number) => `Rs ${n}`,
-    confirm: "price to confirm",
     clear: "Clear",
-    book: "Book on WhatsApp"
+    book: "Book on WhatsApp",
+    seeAll: "See all & edit",
+    title: "Your booking",
+    close: "Close your booking list",
+    remove: (name: string) => `Remove ${name}`,
+    estimated: "Estimated total",
+    note: "The exact price depends on hair length and time; we'll confirm it on WhatsApp.",
+    bookAll: "Book these on WhatsApp",
+    clearAll: "Clear all"
   },
   message: {
     hello: "Hello Sim's Hair and Beauty, I'd like to book:",
     general: "Hello Sim's Hair and Beauty, I would like to book an appointment. Could you please share your availability?",
     availability: "Could you share your availability?",
-    confirmAndAvailability: "Could you confirm the price for my hair length, and share your availability?",
+    total: (price: string) => `Estimated total: ${price}`,
     promo: (title: string) => `Hello Sim's Hair and Beauty, I'd like to book this month's offer: ${title}. Could you share your availability?`
   },
   faqTitle: "Before you come in",
@@ -109,15 +115,9 @@ const en = {
     title: "Sim's Hair and Beauty | Hair, Facials and Nails in Flacq, Mauritius",
     description: "Hair, facials, and nail care at Flacq Retail Park, Mauritius. Book on WhatsApp."
   },
-  price: (p: string) => p
 };
 
 export type Strings = typeof en;
-
-/** "From Rs 300" -> "À partir de Rs 300", "Rs 600 to 800" -> "Rs 600 à 800". */
-function priceFr(p: string) {
-  return p.replace(/^From\s+/i, "À partir de ").replace(/\s+to\s+/i, " à ");
-}
 
 const fr: Strings = {
   langName: "Français",
@@ -159,7 +159,7 @@ const fr: Strings = {
     metaTitle: "Tarifs et prestations",
     metaDescription:
       "Tous les tarifs de Sim's Hair and Beauty à Flacq, Maurice : coupes, coloration, kératine et soins réparateurs, soins du visage, épilation, ongles, massages, coiffure et maquillage de mariée.",
-    intro: "Tous les prix sont en roupies. Les prix coiffure varient selon la longueur et le temps de coiffage ; nous confirmerons le vôtre à la réservation.",
+    intro: "Tous les prix sont en roupies. Quand il y a une fourchette, le prix final dépend de la longueur des cheveux et du temps.",
     download: "Télécharger le PDF",
     tapHint: "Touchez les prestations qui vous intéressent, puis envoyez-les-nous sur WhatsApp en un seul message.",
     sections: "Sections de la carte",
@@ -171,16 +171,22 @@ const fr: Strings = {
   },
   dock: {
     count: (n) => `${n} ${n === 1 ? "prestation" : "prestations"}`,
-    total: (n) => `Rs ${n}`,
-    confirm: "prix à confirmer",
     clear: "Effacer",
-    book: "Réserver sur WhatsApp"
+    book: "Réserver sur WhatsApp",
+    seeAll: "Voir et modifier",
+    title: "Votre réservation",
+    close: "Fermer votre liste de réservation",
+    remove: (name) => `Retirer ${name}`,
+    estimated: "Total estimé",
+    note: "Le prix exact dépend de la longueur des cheveux et du temps ; nous vous le confirmerons sur WhatsApp.",
+    bookAll: "Réserver sur WhatsApp",
+    clearAll: "Tout effacer"
   },
   message: {
     hello: "Bonjour Sim's Hair and Beauty, je souhaite réserver :",
     general: "Bonjour Sim's Hair and Beauty, je souhaite prendre rendez-vous. Pourriez-vous me donner vos disponibilités ?",
     availability: "Pourriez-vous me donner vos disponibilités ?",
-    confirmAndAvailability: "Pourriez-vous me confirmer le prix selon la longueur de mes cheveux, et me donner vos disponibilités ?",
+    total: (price) => `Total estimé : ${price}`,
     promo: (title) => `Bonjour Sim's Hair and Beauty, je souhaite réserver l'offre du mois : ${title}. Pourriez-vous me donner vos disponibilités ?`
   },
   faqTitle: "Avant votre visite",
@@ -224,7 +230,6 @@ const fr: Strings = {
     title: "Sim's Hair and Beauty | Coiffure, soins du visage et ongles à Flacq, Maurice",
     description: "Coiffure, soins du visage et ongles à Flacq Retail Park, Maurice. Réservez sur WhatsApp."
   },
-  price: priceFr
 };
 
 export const strings: Record<Lang, Strings> = { en, fr };

@@ -5,39 +5,29 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { whatsappLink } from "@/content/site";
 import { useLang } from "@/lib/i18n";
 import type { Strings } from "@/content/strings";
+import { formatPrice, sumPrices } from "@/lib/price";
 
-export type BookingItem = { id: string; name: string; price: string };
+/** name: as it appears in the WhatsApp message. label/category: shown in the open booking list. */
+export type BookingItem = { id: string; name: string; price: string; label?: string; category?: string };
 
-/** "Rs 700" is fixed; "From Rs 300" or "Rs 600 to 800" depend on hair length or styling time. */
-export function fixedPrice(price: string): number | null {
-  const match = /^Rs\s?(\d+)$/.exec(price.trim());
-  return match ? Number(match[1]) : null;
+/** Estimated total for the picked services, e.g. "Rs 1,050 – 2,250", or null if a price can't be read. */
+export function bookingTotal(items: BookingItem[]): string | null {
+  if (items.length === 0) return null;
+  const sum = sumPrices(items.map((i) => i.price));
+  return sum ? formatPrice(sum) : null;
 }
 
 export function bookingMessage(items: BookingItem[], t: Strings) {
-  const lines = items.map((i) => {
-    const fixed = fixedPrice(i.price);
-    return fixed === null ? `• ${i.name}` : `• ${i.name} (Rs ${fixed})`;
-  });
-  const needsQuote = items.some((i) => fixedPrice(i.price) === null);
-  return [t.message.hello, ...lines, needsQuote ? t.message.confirmAndAvailability : t.message.availability].join("\n");
-}
-
-/** Total in rupees, or null when any picked service has a variable price. */
-export function bookingTotal(items: BookingItem[]): number | null {
-  let total = 0;
-  for (const i of items) {
-    const fixed = fixedPrice(i.price);
-    if (fixed === null) return null;
-    total += fixed;
-  }
-  return total;
+  const lines = items.map((i) => (i.price ? `• ${i.name} (${i.price})` : `• ${i.name}`));
+  const total = items.length > 1 ? bookingTotal(items) : null;
+  return [t.message.hello, ...lines, ...(total ? [t.message.total(total)] : []), t.message.availability].join("\n");
 }
 
 type BookingContextValue = {
   items: BookingItem[];
   has: (id: string) => boolean;
   toggle: (item: BookingItem) => void;
+  remove: (id: string) => void;
   clear: () => void;
   href: string;
 };
@@ -72,11 +62,12 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
       setItems((current) => (current.some((i) => i.id === item.id) ? current.filter((i) => i.id !== item.id) : [...current, item])),
     []
   );
+  const remove = useCallback((id: string) => setItems((current) => current.filter((i) => i.id !== id)), []);
   const clear = useCallback(() => setItems([]), []);
 
   const value = useMemo(
-    () => ({ items, has, toggle, clear, href: whatsappLink(bookingMessage(items, t)) }),
-    [items, has, toggle, clear, t]
+    () => ({ items, has, toggle, remove, clear, href: whatsappLink(bookingMessage(items, t)) }),
+    [items, has, toggle, remove, clear, t]
   );
 
   return <BookingContext.Provider value={value}>{children}</BookingContext.Provider>;

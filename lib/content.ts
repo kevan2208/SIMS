@@ -1,4 +1,5 @@
 import "server-only";
+import { displayPrice } from "@/lib/price";
 
 import snapshot from "@/content/snapshot.json";
 import type { Lang } from "@/content/strings";
@@ -41,6 +42,8 @@ export type Service = {
   name: string;
   /** Name used in the WhatsApp message; adds the category when the same name exists in two places. */
   bookingName: string;
+  /** Category name, shown under the service in the open booking list. */
+  category: string;
   price: string;
 };
 export type Category = { id: string; name: string; note: string; items: Service[] };
@@ -121,7 +124,7 @@ async function loadRaw(): Promise<{ raw: Raw; source: SiteContent["source"] }> {
           noteFr: noteFr ?? "",
           name,
           nameFr: nameFr ?? "",
-          price: normalisePrice(price),
+          price,
           home: home ?? ""
         })),
       guide: guide.filter((r) => r[0] && r[2]).map(([concern, concernFr, service]) => ({ concern, concernFr: concernFr ?? "", service })),
@@ -145,12 +148,6 @@ async function loadRaw(): Promise<{ raw: Raw; source: SiteContent["source"] }> {
     console.error("[content] Falling back to the built-in snapshot:", error);
     return { raw: snapshot as Raw, source: "snapshot" };
   }
-}
-
-/** Sheets turn "700" into a number; the site shows prices as "Rs 700". */
-function normalisePrice(p: string) {
-  const t = (p ?? "").trim();
-  return /^\d+$/.test(t) ? `Rs ${t}` : t;
 }
 
 // ---------- shaping ----------
@@ -187,7 +184,8 @@ export async function getContent(lang: Lang): Promise<SiteContent> {
       id: `${r.categoryId}:${r.name}`,
       name,
       bookingName: (nameCounts.get(r.name) ?? 0) > 1 ? `${name} (${cat.name.toLowerCase()})` : name,
-      price: t.price(r.price)
+      category: cat.name,
+      price: displayPrice(r.price)
     };
     cat.items.push(service);
     if (!byName.has(r.name)) byName.set(r.name, { ...service, categoryId: r.categoryId });
@@ -218,7 +216,7 @@ export async function getContent(lang: Lang): Promise<SiteContent> {
     ? {
         title: pick(live.title, live.titleFr),
         details: pick(live.details, live.detailsFr),
-        price: live.price ? t.price(normalisePrice(live.price)) : "",
+        price: live.price ? displayPrice(live.price) : "",
         ends: live.ends,
         endsLabel: live.ends ? t.promo.until(formatDate(live.ends, lang)) : "",
         poster: live.poster

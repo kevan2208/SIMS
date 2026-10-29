@@ -22,7 +22,7 @@ export function Guide({ guide, lang }: { guide: GuideItem[]; lang: Lang }) {
             treatment: g.treatment,
             price: g.price,
             href: `${localePath(lang, "/services")}${g.href}`,
-            service: { id: g.service.id, name: g.service.name, bookingName: g.service.bookingName, price: g.service.price }
+            service: { id: g.service.id, name: g.service.name, bookingName: g.service.bookingName, price: g.service.price, category: g.service.category }
           }))}
         />
       </Container>

@@ -1,6 +1,4 @@
-import Link from "next/link";
-
-import { Frangipani } from "@/components/brand/logo";
+import { GuideList } from "@/components/home/guide-list";
 import { Container } from "@/components/ui/container";
 import { localePath, strings, type Lang } from "@/content/strings";
 import type { GuideItem } from "@/lib/content";
@@ -18,22 +16,15 @@ export function Guide({ guide, lang }: { guide: GuideItem[]; lang: Lang }) {
           <p className="mt-3 max-w-[26rem] text-[1rem] leading-relaxed text-mauve">{t.guide.body}</p>
         </div>
 
-        <ul className="border-t border-seam">
-          {guide.map((g) => (
-            <li className="border-b border-seam" key={g.concern}>
-              <Link className="group grid grid-cols-[1.75rem_1fr] items-start gap-3 py-4" href={`${localePath(lang, "/services")}${g.href}`}>
-                <Frangipani className="mt-0.5 text-sims-red" size={24} />
-                <span>
-                  <span className="block text-[1.02rem] font-semibold text-ink">{g.concern}</span>
-                  <span className="mt-0.5 block text-[0.95rem] text-mauve">
-                    <span className="font-semibold text-sims-red group-hover:underline group-hover:underline-offset-4">{g.treatment}</span>,{" "}
-                    {g.price}
-                  </span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <GuideList
+          rows={guide.map((g) => ({
+            concern: g.concern,
+            treatment: g.treatment,
+            price: g.price,
+            href: `${localePath(lang, "/services")}${g.href}`,
+            service: { id: g.service.id, name: g.service.name, bookingName: g.service.bookingName, price: g.service.price }
+          }))}
+        />
       </Container>
     </section>
   );

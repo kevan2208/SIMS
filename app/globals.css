@@ -243,27 +243,21 @@ html[data-intro="seen"] .intro-rise {
   }
 }
 
-/* Treatment guide: rows drift in one after another the first time the list is reached,
-   and the flower turns a little when its treatment is added. Reduced motion skips both. */
-.guide-list[data-reveal="pending"] .guide-row {
-  opacity: 0;
-  transform: translateY(10px);
+/* Booking feedback: the Add button fills from the left, the flower turns, the + circle pops,
+   and the booking card hops when the list grows. Reduced motion shortens all of it to nothing. */
+.fill-btn {
+  background-image: linear-gradient(#af2830, #af2830);
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  transition:
+    background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.2s,
+    border-color 0.2s;
 }
 
-.guide-list[data-reveal="in"] .guide-row {
-  animation: guide-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--i) * 90ms);
-}
-
-@keyframes guide-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.fill-btn[aria-pressed="true"] {
+  background-size: 100% 100%;
 }
 
 .guide-flower {
@@ -272,4 +266,36 @@ html[data-intro="seen"] .intro-rise {
 
 .guide-flower.is-picked {
   transform: rotate(72deg) scale(1.08);
+}
+
+.pick-pop {
+  animation: pick-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pick-pop {
+  0% {
+    transform: translateY(3px) scale(0.6);
+  }
+  60% {
+    transform: translateY(3px) scale(1.25);
+  }
+  100% {
+    transform: translateY(3px) scale(1);
+  }
+}
+
+.dock-hop {
+  animation: dock-hop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes dock-hop {
+  0% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }

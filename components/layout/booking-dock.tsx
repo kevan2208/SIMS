@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ActionIcon } from "@/components/ui/action-icon";
 import { useOpenStatus } from "@/components/ui/open-status";
@@ -45,6 +45,14 @@ export function BookingDock() {
     };
   }, [pathname]);
 
+  // A small hop on the card each time something is added to an already-open list.
+  const [hop, setHop] = useState(0);
+  const prevCount = useRef(items.length);
+  useEffect(() => {
+    if (items.length > prevCount.current && prevCount.current > 0) setHop((h) => h + 1);
+    prevCount.current = items.length;
+  }, [items.length]);
+
   const picked = items.length > 0;
   const total = bookingTotal(items);
   const showBar = !picked && scrolled && !heroCardVisible;
@@ -62,30 +70,33 @@ export function BookingDock() {
         )}
       >
         {picked ? (
-          <div className="ticket grid grid-cols-[1fr_7rem] rounded-md bg-white text-ink shadow-[0_10px_30px_rgba(110,70,81,0.2)]" style={{ ["--stub" as string]: "7rem" }}>
-            <div className="min-w-0 py-3 pl-4 pr-3">
-              <p className="flex items-center justify-between gap-3 text-[0.78rem] text-mauve">
-                <span>
-                  {t.dock.count(items.length)}, {total !== null ? t.dock.total(total) : t.dock.confirm}
-                </span>
-                <button className="font-semibold text-plum underline underline-offset-2 hover:text-ink" onClick={clear} type="button">
-                  {t.dock.clear}
-                </button>
-              </p>
-              <p className="mt-0.5 truncate font-display text-[1.1rem] leading-snug">
-                {items.map((i) => i.name).join(", ")}
-              </p>
-            </div>
-            <a
-              className="flex flex-col items-center justify-center gap-1 border-l-[1.5px] border-dashed border-dash px-2 text-center text-[0.85rem] font-semibold leading-tight text-sims-red hover:bg-[#fff8fa]"
-              href={href}
-              onClick={() => trackTap("book-list", items.map((i) => i.id).join("|"))}
-              rel="noreferrer"
-              target="_blank"
+          <div className={hop ? "dock-hop" : undefined} key={hop}>
+            <div
+              className="ticket grid grid-cols-[1fr_7rem] rounded-md bg-white text-ink shadow-[0_10px_30px_rgba(110,70,81,0.2)]"
+              style={{ ["--stub" as string]: "7rem" }}
             >
-              <ActionIcon className="h-5 w-5" name="whatsapp" />
-              {t.dock.book}
-            </a>
+              <div className="min-w-0 py-3 pl-4 pr-3">
+                <p className="flex items-center justify-between gap-3 text-[0.78rem] text-mauve">
+                  <span>
+                    {t.dock.count(items.length)}, {total !== null ? t.dock.total(total) : t.dock.confirm}
+                  </span>
+                  <button className="font-semibold text-plum underline underline-offset-2 hover:text-ink" onClick={clear} type="button">
+                    {t.dock.clear}
+                  </button>
+                </p>
+                <p className="mt-0.5 truncate font-display text-[1.1rem] leading-snug">{items.map((i) => i.name).join(", ")}</p>
+              </div>
+              <a
+                className="flex flex-col items-center justify-center gap-1 border-l-[1.5px] border-dashed border-dash px-2 text-center text-[0.85rem] font-semibold leading-tight text-sims-red hover:bg-[#fff8fa]"
+                href={href}
+                onClick={() => trackTap("book-list", items.map((i) => i.id).join("|"))}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <ActionIcon className="h-5 w-5" name="whatsapp" />
+                {t.dock.book}
+              </a>
+            </div>
           </div>
         ) : null}
       </div>

@@ -192,7 +192,7 @@ const fr: Strings = {
         "Choisissez vos prestations sur notre carte et envoyez-les sur WhatsApp en un seul message, ou écrivez directement au +230 5771 8511. Vous pouvez aussi appeler le salon au 413 8644."
     },
     { question: "Y a-t-il un parking ?", answer: "Oui, il y a un parking à Flacq Retail Park." },
-    { question: "Quels moyens de paiement ?", answer: "Espèces, carte, Juice et Apple Pay." },
+    { question: "Quels moyens de paiement ?", answer: "Cash, carte, Juice et Apple Pay." },
     { question: "Quels sont vos horaires ?", answer: "Du lundi au samedi, de 08h30 à 17h30. Fermé le dimanche." },
     {
       question: "Vous déplacez-vous pour les mariages ?",
@@ -208,7 +208,7 @@ const fr: Strings = {
     contact: "Contact",
     contactText: (wa, tel) => `WhatsApp ${wa}, salon ${tel}`,
     payment: "Paiement",
-    paymentMethods: ["Espèces", "Carte", "Juice", "Apple Pay"],
+    paymentMethods: ["Cash", "Carte", "Juice", "Apple Pay"],
     reviews: "Lire nos avis Google",
     mapTitle: "Carte indiquant Sim's Hair and Beauty à Flacq Retail Park",
     inside: (street) => `À ${street}.`,

@@ -11,7 +11,8 @@ export const metadata: Metadata = { title: "Price images", robots: { index: fals
  * Private page (not linked from the site): price images for social media, one per category,
  * always made from the current prices. On a phone, tap an image and long-press to save it.
  */
-export default async function SharePage({ searchParams }: { searchParams: { lang?: string } }) {
+export default async function SharePage(props: { searchParams: Promise<{ lang?: string }> }) {
+  const searchParams = await props.searchParams;
   const lang = searchParams.lang === "fr" ? "fr" : "en";
   const { categories, source } = await getContent(lang);
 

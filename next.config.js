@@ -2,14 +2,14 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  experimental: {
-    serverComponentsExternalPackages: ["@react-pdf/renderer"],
-    // The PDF menu reads these fonts at runtime.
-    outputFileTracingIncludes: {
-      "/menu.pdf": ["./assets/fonts/**"],
-      "/fr/menu.pdf": ["./assets/fonts/**"],
-      "/share/[...slug]": ["./assets/fonts/**", "./public/logo-sims.svg"]
-    }
+  serverExternalPackages: ["@react-pdf/renderer"],
+  // Pin the project root: a stray lockfile higher up the disk would otherwise be picked.
+  outputFileTracingRoot: __dirname,
+  // The PDF menu reads these fonts at runtime.
+  outputFileTracingIncludes: {
+    "/menu.pdf": ["./assets/fonts/**"],
+    "/fr/menu.pdf": ["./assets/fonts/**"],
+    "/share/[...slug]": ["./assets/fonts/**", "./public/logo-sims.svg"]
   },
   async redirects() {
     return [

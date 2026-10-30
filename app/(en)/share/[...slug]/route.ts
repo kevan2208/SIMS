@@ -5,7 +5,8 @@ export const runtime = "nodejs";
 export const revalidate = 300;
 
 /** /share/{en|fr}/{post|status}/{category-id}.png: a ready-to-post price image for one category. */
-export async function GET(_req: Request, { params }: { params: { slug: string[] } }) {
+export async function GET(_req: Request, props: { params: Promise<{ slug: string[] }> }) {
+  const params = await props.params;
   const [lang, format, file] = params.slug ?? [];
   const slug = file?.replace(/\.png$/, "");
   if ((lang !== "en" && lang !== "fr") || !(format in FORMATS) || !slug) {

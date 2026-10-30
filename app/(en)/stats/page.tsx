@@ -27,7 +27,8 @@ function keyMatches(given: string | undefined) {
 }
 
 /** Private page: /stats?key=… (the key is set in Vercel as STATS_KEY). */
-export default async function StatsPage({ searchParams }: { searchParams: { key?: string; days?: string } }) {
+export default async function StatsPage(props: { searchParams: Promise<{ key?: string; days?: string }> }) {
+  const searchParams = await props.searchParams;
   if (!keyMatches(searchParams.key)) {
     return (
       <main className="pink-wash -mt-16 pt-16">

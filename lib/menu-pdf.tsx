@@ -22,7 +22,7 @@ Font.registerHyphenationCallback((word) => [word]);
 const INK = "#1a1416";
 const RED = "#af2830";
 const PLUM = "#6e4651";
-const MAUVE = "#8f6a74";
+const MAUVE = "#765360";
 const DOTS = "#d99aab";
 
 const A4 = { w: 595.28, h: 841.89 };

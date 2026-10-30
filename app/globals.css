@@ -41,6 +41,14 @@ summary {
   border-radius: 4px;
 }
 
+/* No single word stranded on the last line of a paragraph. */
+p,
+dd,
+li,
+figcaption {
+  text-wrap: pretty;
+}
+
 :where([id]) {
   scroll-margin-top: 5rem;
 }
@@ -155,7 +163,7 @@ summary {
 
 /*
  * Homepage arrival: the hair sweeps in, "Sim's" settles, the frangipani blooms, then the booking card rises.
- * About 1.4s, never blocks the page, plays once per visit (see the intro script in layout.tsx),
+ * About 1.2s, never hides the booking card, plays once per visit (see the intro script in layout.tsx),
  * and is skipped entirely when the visitor has asked for reduced motion.
  */
 .logo-intro__hair {
@@ -163,13 +171,13 @@ summary {
 }
 
 .logo-intro__script {
-  animation: intro-settle 800ms cubic-bezier(0.22, 1, 0.36, 1) 350ms both;
+  animation: intro-settle 800ms cubic-bezier(0.22, 1, 0.36, 1) 150ms both;
 }
 
 .logo-intro__flower {
   transform-box: view-box;
   transform-origin: 89.25% 24.4%;
-  animation: intro-bloom 700ms cubic-bezier(0.34, 1.4, 0.64, 1) 850ms both;
+  animation: intro-bloom 700ms cubic-bezier(0.16, 1, 0.3, 1) 850ms both;
 }
 
 .logo-intro__tag {
@@ -177,7 +185,7 @@ summary {
 }
 
 .intro-rise {
-  animation: intro-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) 1100ms both;
+  animation: intro-rise 600ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
 }
 
 @keyframes intro-sweep {
@@ -220,13 +228,12 @@ summary {
   }
 }
 
+/* Movement only: the lede and booking card are readable from the first paint. */
 @keyframes intro-rise {
   from {
-    opacity: 0;
     transform: translateY(14px);
   }
   to {
-    opacity: 1;
     transform: none;
   }
 }
@@ -261,7 +268,7 @@ html[data-intro="seen"] .intro-rise {
 }
 
 .guide-flower {
-  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .guide-flower.is-picked {
@@ -269,7 +276,7 @@ html[data-intro="seen"] .intro-rise {
 }
 
 .pick-pop {
-  animation: pick-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: pick-pop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes pick-pop {
@@ -309,7 +316,7 @@ html[data-intro="seen"] .intro-rise {
 }
 
 .dock-hop {
-  animation: dock-hop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: dock-hop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes dock-hop {

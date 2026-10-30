@@ -68,7 +68,6 @@ export function useOpenStatus() {
 }
 
 export function OpenStatus({ className }: { className?: string }) {
-  const { t } = useLang();
   const status = useOpenStatus();
 
   return (
@@ -77,7 +76,8 @@ export function OpenStatus({ className }: { className?: string }) {
         aria-hidden="true"
         className={cn("inline-block h-2 w-2 rounded-full", status === null ? "bg-seam" : status.open ? "bg-[#2f7d4f]" : "bg-mauve/50")}
       />
-      <span className={status?.open ? "text-[#2c6a45]" : "text-mauve"}>{status ? status.text : t.hoursSummary}</span>
+      {/* One empty line until the browser knows the time, so nothing below it moves when the status appears. */}
+      <span className={status?.open ? "text-[#2c6a45]" : "text-mauve"}>{status ? status.text : "\u00a0"}</span>
     </p>
   );
 }

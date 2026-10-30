@@ -194,7 +194,7 @@ const fr: Strings = {
     {
       question: "Faut-il réserver ?",
       answer:
-        "Nous travaillons surtout sur rendez-vous : réserver sur WhatsApp est le meilleur moyen d'avoir l'heure qui vous convient. Sans rendez-vous, nous vous accueillons si quelqu’un est disponible, mais l'attente peut être plus longue selon l'affluence."
+        "Nous travaillons surtout sur rendez-vous : réserver sur WhatsApp est le meilleur moyen d'avoir l'heure qui vous convient. Sans rendez-vous, nous vous accueillons si quelqu'un est disponible, mais l'attente peut être plus longue selon l'affluence."
     },
     {
       question: "Comment réserver ?",

@@ -12,7 +12,7 @@ module.exports = {
         // The logo: script red, hair black. The pink carries over from the original site.
         ink: "#1a1416",
         plum: "#6e4651",
-        mauve: "#8f6a74",
+        mauve: "#765360",
         petal: "#fbe3e9",
         rose: "#f5ccd7",
         blush: "#fdf3f5",

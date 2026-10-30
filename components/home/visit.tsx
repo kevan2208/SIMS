@@ -1,3 +1,4 @@
+import { MapEmbed } from "@/components/home/map-embed";
 import { Container } from "@/components/ui/container";
 import { OpenStatus } from "@/components/ui/open-status";
 import { TextLink } from "@/components/ui/text-link";
@@ -48,13 +49,7 @@ export function Visit({ lang }: { lang: Lang }) {
             <p className="absolute inset-0 flex items-center justify-center p-6 text-center text-[0.95rem] text-plum">
               {street}, {locality}
             </p>
-            <iframe
-              className="relative h-[20rem] w-full border-0 md:h-full md:min-h-[24rem]"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              src={`${siteConfig.mapEmbedSrc}&hl=${lang}`}
-              title={t.visit.mapTitle}
-            />
+            <MapEmbed src={`${siteConfig.mapEmbedSrc}&hl=${lang}`} title={t.visit.mapTitle} />
           </div>
           <figcaption className="mt-2 text-[0.88rem] text-mauve">
             {t.visit.inside(street)}{" "}

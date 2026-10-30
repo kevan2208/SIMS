@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * The Google map costs about 450 KB, so it only loads once the visitor scrolls near it.
+ * The Google map costs about 450 KB, so it starts loading about a screen and a half before the visitor reaches it.
  * Chrome's own `loading="lazy"` starts it far too early on a phone-length page.
  */
 export function MapEmbed({ src, title }: { src: string; title: string }) {
@@ -24,7 +24,7 @@ export function MapEmbed({ src, title }: { src: string; title: string }) {
           observer.disconnect();
         }
       },
-      { rootMargin: "300px 0px" }
+      { rootMargin: "1200px 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();

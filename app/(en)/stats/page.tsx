@@ -1,3 +1,4 @@
+import { createHash, timingSafeEqual } from "node:crypto";
 import type { Metadata } from "next";
 
 import { Container } from "@/components/ui/container";
@@ -17,9 +18,17 @@ const EVENT_NAMES: Record<string, string> = {
   promo: "Booked the monthly offer"
 };
 
+/** Compares hashes so the check takes the same time however much of the key is right. */
+function keyMatches(given: string | undefined) {
+  const expected = process.env.STATS_KEY;
+  if (!expected || !given) return false;
+  const digest = (v: string) => createHash("sha256").update(v).digest();
+  return timingSafeEqual(digest(given), digest(expected));
+}
+
 /** Private page: /stats?key=… (the key is set in Vercel as STATS_KEY). */
 export default async function StatsPage({ searchParams }: { searchParams: { key?: string; days?: string } }) {
-  if (!process.env.STATS_KEY || searchParams.key !== process.env.STATS_KEY) {
+  if (!keyMatches(searchParams.key)) {
     return (
       <main className="pink-wash -mt-16 pt-16">
         <Container className="py-20">

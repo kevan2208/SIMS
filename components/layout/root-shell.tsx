@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Prata } from "next/font/google";
+import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 
 import "@/app/globals.css";
@@ -12,8 +12,20 @@ import { strings, type Lang } from "@/content/strings";
 import { BookingProvider } from "@/lib/booking";
 import { LangProvider } from "@/lib/i18n";
 
-const displayFont = Prata({ subsets: ["latin"], weight: ["400"], variable: "--font-display", display: "swap" });
-const bodyFont = Manrope({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-body", display: "swap" });
+// Self-hosted (Google's latin subsets), so a build never depends on reaching Google Fonts.
+const displayFont = localFont({
+  src: "../../assets/fonts/web/prata-latin.woff2",
+  weight: "400",
+  variable: "--font-display",
+  display: "swap",
+  adjustFontFallback: "Times New Roman"
+});
+const bodyFont = localFont({
+  src: "../../assets/fonts/web/manrope-latin.woff2",
+  weight: "400 600",
+  variable: "--font-body",
+  display: "swap"
+});
 
 export function rootMetadata(lang: Lang): Metadata {
   const t = strings[lang];
